@@ -14,11 +14,13 @@ class Login extends Component{
         this.state = {
             username : "",
             password : "",
+            acctType : "host",
             authFlag : false
         }
         //Bind the handlers to this class
         this.usernameChangeHandler = this.usernameChangeHandler.bind(this);
         this.passwordChangeHandler = this.passwordChangeHandler.bind(this);
+        this.acctTypeChangeHandler = this.acctTypeChangeHandler.bind(this);
         this.submitLogin = this.submitLogin.bind(this);
     }
     //Call the Will Mount to set the auth Flag to false
@@ -39,6 +41,11 @@ class Login extends Component{
             password : e.target.value
         })
     }
+    acctTypeChangeHandler = (e) => {
+        this.setState({
+            acctType : e.target.value
+        })
+    }
     //submit Login handler to send a request to the node backend
     submitLogin = (e) => {
         var headers = new Headers();
@@ -46,7 +53,8 @@ class Login extends Component{
         e.preventDefault();
         const data = {
             username : this.state.username,
-            password : this.state.password
+            password : this.state.password,
+            acctType : this.state.acctType
         }
         //set the with credentials to true
         axios.defaults.withCredentials = true;
@@ -93,6 +101,12 @@ class Login extends Component{
                             </div>
                             <div className="form-group">
                                 <input onChange = {this.passwordChangeHandler} type="password" className="form-control" name="password" placeholder="Password"/>
+                            </div>
+                            <div className="form-group">
+                                <select onChange = {this.acctTypeChangeHandler} name="acctType" defaultValue="host">
+                                    <option value="host">Host</option>
+                                    <option value="guest">Guest</option>
+                                </select>
                             </div>
                             <button onClick = {this.submitLogin} className="btn btn-primary">Login</button>      
                                        

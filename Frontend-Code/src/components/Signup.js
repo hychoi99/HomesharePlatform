@@ -4,9 +4,13 @@ import axios from 'axios';
 class Signup extends Component {
 
     state = {
-        username: '',
+        email: '',
         password: '',
-        authorization: 'student',
+        //authorization: 'student',
+        acctType: 'host',
+        fname: '',
+        lname: '',
+        gender: '',
         status: 0
     }
 
@@ -16,9 +20,14 @@ class Signup extends Component {
 
     submitSignup = (e) => {
         const data = {
-            username: this.state.username,
+            email: this.state.username,
             password: this.state.password,
-            authorization: this.state.authorization
+            //authorization: this.state.authorization,
+            acctType: this.state.acctType,
+            fname: this.state.fname,
+            lname: this.state.lname,
+            phone: this.state.phone,
+            gender: this.state.gender
         }
         axios.post('http://localhost:3001/signup', data)
             .then(response => {
@@ -59,12 +68,24 @@ class Signup extends Component {
                                 <input onChange = {this.onChangeInput} type="password" className="form-control" name="password" placeholder="Password"/>
                             </div>
                             <div className="form-group">
-                                <select onChange = {this.onChangeInput} name="authorization" defaultValue="student">
-                                    <option value="student">Student</option>
-                                    <option value="faculty">Faculty</option>
+                                <input onChange = {this.onChangeInput} type="text" className="form-control" name="fname" placeholder="First Name"/>
+                            </div>
+                            <div className="form-group">
+                                <input onChange = {this.onChangeInput} type="text" className="form-control" name="lname" placeholder="Last Name"/>
+                            </div>
+                            <div className="form-group">
+                                <input onChange = {this.onChangeInput} type="text" className="form-control" name="phone" placeholder="Phone"/>
+                            </div>
+                            <div className="form-group">
+                                <input onChange = {this.onChangeInput} type="text" className="form-control" name="gender" placeholder="Gender"/>
+                            </div>
+                            <div className="form-group">
+                                <select onChange = {this.onChangeInput} name="acctType" defaultValue="host">
+                                    <option value="host">Host</option>
+                                    <option value="guest">Guest</option>
                                 </select>
                             </div>
-                            <button onClick = {this.submitSignup} className="btn btn-primary">Sign Up</button>
+                            <button onClick = {this.submitSignup} className="btn btn-primary">Submit</button>
                             {status}                 
                     </div>
                 </div>

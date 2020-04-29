@@ -91,7 +91,7 @@ class Navbar extends Component {
             <nav className="navbar navbar-inverse" style={navStyle}>
                 <div className="container-fluid">
                     <div className="navbar-header">
-                        <Link to="/home">Canvas App</Link>
+                        <Link to="/home">Home Share App</Link>
                     </div>
                     <ul className="nav navbar-nav">
                         {navLogin}

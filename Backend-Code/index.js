@@ -4,6 +4,7 @@
 
 var express = require('express');
 var app = express();
+var crypto = require('crypto');
 const mysql = require('mysql');
 
 
@@ -63,6 +64,7 @@ app.use(function(req, res, next) {
 });
 
 var loggedInUserid = -1;
+var acctTypeGlobal = "no";
 
 
 
@@ -79,28 +81,60 @@ app.post('/login', function(req,res) {
     console.log("Req Body : ", req.body);
     let inputUsername = req.body.username;
     let inputPassword = req.body.password;
+    let acctType = req.body.acctType
 
-    let sql = `SELECT * FROM user WHERE username = '${inputUsername}' and password = '${inputPassword}'`;
+    let sql = ``;
+    if (acctType == "admin") {
+
+    } else if (acctType == "host") {
+    	sql = `SELECT * FROM host WHERE Email_addr = '${inputUsername}'`
+    } else if (acctType == "guest") {
+    	sql = `SELECT * FROM guests WHERE Email_addr = '${inputUsername}'`
+    } else {
+    	console.log("Error1");
+    }
+
+
+
+    //let sql = `SELECT * FROM user WHERE username = '${inputUsername}' and password = '${inputPassword}'`;
     console.log(sql);
-    let query = pool.query(sql, (err, result) => {
+    let query = db.query(sql, (err, result) => {
         console.log(result.length + "," + result);
         if (err) {
             throw err;
         } else if (result.length > 0) {
             console.log(result);
-            req.session.user = {username: inputUsername, authorization: result[0].authorization};
-            res.cookie('cookie',"admin",{maxAge: 900000, httpOnly: false, path : '/', userid: result[0].userid});
-            res.writeHead(200,{
-                'Content-Type' : 'text/plain'
-            })
-            loggedInUserid = result[0].userid;
-            myuserid = result[0].userid;
-            console.log("Userid set: ", result[0].userid);
-            //^ this makes line below unneccesary
-            res.write(JSON.stringify(result[0].userid));
-            res.send();
+		    let hash1 = crypto.createHash('sha512');
+		    let hash2 = crypto.createHash('sha512');
+		    hash1.update(inputPassword);
+		    hash2.update(hash1.digest('hex'));
+		    const encrypted = hash2.digest('hex');
+		    if(encrypted === result[0].Password_encrypted){
+		        hash1 = undefined;
+		        hash2 = undefined;
+		        req.session.user = {username: inputUsername, authorization: result[0].authorization};
+	            res.cookie('cookie',"admin",{maxAge: 900000, httpOnly: false, path : '/', userid: result[0].userid});
+	            res.writeHead(200,{
+	                'Content-Type' : 'text/plain'
+	            })
+	            //loggedInUserid = result[0].userid;
+	            acctTypeGlobal = acctType;
+	            //myuserid = result[0].userid;
+	            //console.log("Userid set: ", result[0].userid);
+	            console.log("accttype: ", acctTypeGlobal);
+	            //^ this makes line below unneccesary
+	            //res.write(JSON.stringify(result[0].userid));
+	            res.send();
+		    } else {
+		    	console.log('Credentials not found!');
+	            res.writeHead(201,{
+	                'Content-Type' : 'text/plain'
+	            })
+		        res.send();
+		    }
+
         } else {
-            console.log('Credentials not found!');
+            
         }
     })
 });
@@ -108,6 +142,7 @@ app.post('/login', function(req,res) {
 //Logout User
 app.get('/logout', function(req, res) {
     loggedInUserid = -1;
+    acctTypeGlobal = "no";
     console.log("Userid reset!");
     res.end();
 });
@@ -119,9 +154,41 @@ app.post('/signup', function(req, res) {
     let inputUsername = req.body.username;
     let inputPassword = req.body.password;
     let inputAuthorization = req.body.authorization;
+    let acctType = req.body.acctType;
+    let password = req.body.password;
+    let phone = req.body.phone;
+    let email = req.body.email;
+    let fname = req.body.fname;
+    let lname = req.body.lname;
+    let gender = req.body.gender;
 
-    let post = {username: inputUsername, password: inputPassword, authorization: inputAuthorization};
-    let sql = `INSERT INTO user SET ?`;
+    let sql = ``;
+    if (acctType == "admin") {
+    	console.log("test");
+    } else if (acctType == "host") {
+    	sql = `INSERT INTO host SET ?`;
+    } else if (acctType == "guest") {
+    	sql = `INSERT INTO guests SET ?`;
+    } else {
+    	console.log("Error");
+    	res.send("Acct Type Error");
+    }
+
+    let extra = "";
+    var possible =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (var i = 0; i < 10; i++)
+      extra += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    let hash1 = crypto.createHash("sha512");
+    let hash2 = crypto.createHash("sha512");
+    hash1.update(req.body.password);
+    hash2.update(hash1.digest("hex"));
+
+    //let post = {username: inputUsername, password: inputPassword, authorization: inputAuthorization};
+    let post = {Email_addr: email, Password_encrypted: hash2.digest("hex") , Phone_num: phone, F_name: fname, L_name: lname, Gender: gender};
+
     console.log(post);
     let query = db.query(sql, post, (err, result) => {
         if (err) {
@@ -136,19 +203,21 @@ app.post('/signup', function(req, res) {
 //Get Auth
 app.get('/getauth', function(req,res) {
     console.log("Inside Get /Auth Request");
-    let sql = `SELECT authorization FROM user WHERE userid = ${loggedInUserid}`;
-    console.log(sql);
-    let query = db.query(sql, (err, result) => {
-        console.log(result);
-        if (err) {
-            throw err;
-        } else if (result.length > 0) {
-            console.log(result);
-            res.send(result);
-        } else {
-            console.log('User not Found!');
-        }
-    })
+    console.log(acctTypeGlobal);
+    res.send(acctTypeGlobal);
+    // let sql = `SELECT authorization FROM user WHERE userid = ${loggedInUserid}`;
+    // console.log(sql);
+    // let query = db.query(sql, (err, result) => {
+    //     console.log(result);
+    //     if (err) {
+    //         throw err;
+    //     } else if (result.length > 0) {
+    //         console.log(result);
+    //         res.send(result);
+    //     } else {
+    //         console.log('User not Found!');
+    //     }
+    // })
 });
 
 //Get Profile
