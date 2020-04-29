@@ -11,6 +11,8 @@ import CourseListFaculty from './CourseFaculty/CourseListFaculty';
 import CourseCreate from './CourseFaculty/CourseCreate';
 
 import HostRooms from './HostRooms';
+import HostPayments from './HostPayments';
+import HostReviews from './HostReviews';
 
 //Create a Main Component
 class Main extends Component {
@@ -73,6 +75,8 @@ class Main extends Component {
                 <Route path="/courselistfaculty" component={CourseListFaculty} />
                 <Route path="/coursecreate" component={CourseCreate} />
 
+                <Route path="/hostreviews" component={HostReviews} />
+                <Route path="/hostpayments" component={HostPayments} />
             </div>
         )
     }

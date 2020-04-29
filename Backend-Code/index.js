@@ -312,6 +312,32 @@ app.get('/getroomshost', function(req, res) {
         }
     })
 })
+app.get('/getpaymentshost', function(req, res) {
+    console.log("Inside getroomshost");
+    let sql = `SELECT * FROM payment WHERE H_email_addr = '${loggedInUserEmail}'`;
+    console.log(sql);
+    let query = db.query(sql, (err, result) => {
+        if (err) {
+            throw err;
+        } else {
+            console.log(result);
+            res.send(result);
+        }
+    })
+})
+app.get('/getreviewshost', function(req, res) {
+    console.log("Inside getroomshost");
+    let sql = `SELECT * FROM reviews WHERE H_email_addr = '${loggedInUserEmail}'`;
+    console.log(sql);
+    let query = db.query(sql, (err, result) => {
+        if (err) {
+            throw err;
+        } else {
+            console.log(result);
+            res.send(result);
+        }
+    })
+})
 
 //Create Course
 app.post('/createcourse', function(req, res) {

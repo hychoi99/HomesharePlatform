@@ -67,9 +67,9 @@ class Navbar extends Component {
                 navLogin = (
                     <ul className="nav navbar-nav navbar-right">
                             <li className="active"><Link to="/home">Home</Link></li>
-                            <li><Link to="/updateprofile">My Rooms</Link></li>
-                            <li><Link to="/courseliststudent">My Payments</Link></li>
-                            <li><Link to="/courseregisterstudent">My Reviews</Link></li>
+                            <li><Link to="/home">My Rooms</Link></li>
+                            <li><Link to="/hostpayments">My Payments</Link></li>
+                            <li><Link to="/hostreviews">My Reviews</Link></li>
                             <br />
                             <li><Link to="/" onClick = {this.handleLogout}><span className="glyphicon glyphicon-user"></span>Logout</Link></li>
                     </ul>
