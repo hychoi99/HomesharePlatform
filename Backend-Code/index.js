@@ -63,7 +63,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-var loggedInUserid = -1;
+var loggedInUserEmail = '';
 var acctTypeGlobal = "no";
 
 
@@ -71,7 +71,7 @@ var acctTypeGlobal = "no";
 //Get Home (list of classes)
 app.get('/home', function(req,res) {
     console.log("Inside Home (list of classes");
-    console.log("Getting course list for: ", req.body);
+    //console.log("Getting course list for: ", req.body);
 });
 
 var myuserid;
@@ -118,6 +118,7 @@ app.post('/login', function(req,res) {
 	                'Content-Type' : 'text/plain'
 	            })
 	            //loggedInUserid = result[0].userid;
+	            loggedInUserEmail = result[0].Email_addr;
 	            acctTypeGlobal = acctType;
 	            //myuserid = result[0].userid;
 	            //console.log("Userid set: ", result[0].userid);
@@ -141,7 +142,7 @@ app.post('/login', function(req,res) {
 
 //Logout User
 app.get('/logout', function(req, res) {
-    loggedInUserid = -1;
+    loggedInUserEmail = '';
     acctTypeGlobal = "no";
     console.log("Userid reset!");
     res.end();
@@ -288,6 +289,19 @@ app.post('/updateprofile', function(req, res) {
 app.get('/getcourselistfaculty', function(req, res) {
     console.log("Inside Get Faculty User's Course List");
     let sql = `SELECT * FROM course WHERE facultyid = ${loggedInUserid}`;
+    console.log(sql);
+    let query = db.query(sql, (err, result) => {
+        if (err) {
+            throw err;
+        } else {
+            console.log(result);
+            res.send(result);
+        }
+    })
+})
+app.get('/getroomshost', function(req, res) {
+    console.log("Inside getroomshost");
+    let sql = `SELECT * FROM rooms WHERE H_email_addr = '${loggedInUserEmail}'`;
     console.log(sql);
     let query = db.query(sql, (err, result) => {
         if (err) {

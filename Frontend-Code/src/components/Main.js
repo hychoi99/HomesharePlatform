@@ -10,6 +10,8 @@ import CourseRegister from './CourseStudent/CourseRegister';
 import CourseListFaculty from './CourseFaculty/CourseListFaculty';
 import CourseCreate from './CourseFaculty/CourseCreate';
 
+import HostRooms from './HostRooms';
+
 //Create a Main Component
 class Main extends Component {
     state = {
@@ -21,7 +23,7 @@ class Main extends Component {
         axios.get('http://localhost:3001/getauth')
         .then((response) => {
             console.log(response);
-            this.setState({ authorization: response.data[0].authorization });
+            this.setState({ authorization: response.data });
         });
     }
 
@@ -29,7 +31,7 @@ class Main extends Component {
         axios.get('http://localhost:3001/getauth')
         .then((response) => {
             console.log(response);
-            this.setState({ authorization: response.data[0].authorization });
+            this.setState({ authorization: response.data });
         });
     }
 
@@ -42,6 +44,15 @@ class Main extends Component {
         } else {
             home = <Route path="/home" component={CourseList}/>
         }
+
+        if (this.state.authorization === 'host') {
+            home = (<Route path="/home" component={HostRooms}/>);
+        } else if (this.state.authorization === 'guest') {
+            home = <Route path="/home" component={CourseList}/>
+        } else {
+            home = <Route path="/home" component={CourseList}/>
+        }
+
         return(
             <div>
                 {/*Render Different Component based on Route*/}
