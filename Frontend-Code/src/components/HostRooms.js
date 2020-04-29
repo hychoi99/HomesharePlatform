@@ -27,6 +27,7 @@ class HostRooms extends Component {
         return (
             <div>
                 <h3>Your Rooms</h3>
+                <Link to={`/addroom`}>Add New Room</Link>
                 <table>
                     <tr>
                         <th>ID</th>

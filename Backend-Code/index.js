@@ -313,7 +313,7 @@ app.get('/getroomshost', function(req, res) {
     })
 })
 app.get('/getpaymentshost', function(req, res) {
-    console.log("Inside getroomshost");
+    console.log("Inside getpaymentshost");
     let sql = `SELECT * FROM payment WHERE H_email_addr = '${loggedInUserEmail}'`;
     console.log(sql);
     let query = db.query(sql, (err, result) => {
@@ -326,7 +326,7 @@ app.get('/getpaymentshost', function(req, res) {
     })
 })
 app.get('/getreviewshost', function(req, res) {
-    console.log("Inside getroomshost");
+    console.log("Inside getreviewshost");
     let sql = `SELECT * FROM reviews WHERE H_email_addr = '${loggedInUserEmail}'`;
     console.log(sql);
     let query = db.query(sql, (err, result) => {
@@ -338,6 +338,27 @@ app.get('/getreviewshost', function(req, res) {
         }
     })
 })
+app.post('/addroom', function(req, res) {
+    console.log("Inside addroom");
+    console.log("Req Body : ", req.body);
+    let price = req.body.price;
+    let type = req.body.type;
+    let maxguest = req.body.maxguest;
+    let addr = req.body.addr;
+    let status = req.body.status;
+
+    sql = 'INSERT INTO rooms SET ?'
+    post = {R_ID: Math.random()*10000, H_email_addr: loggedInUserEmail, R_Price: price, R_Type: type, R_MaxGuest: maxguest, R_Addr: addr, R_Status: status};
+    query = db.query(sql, post, (err2, result2) => {
+        if (err2) {
+            console.log(err2);
+            throw err2;
+        } else {
+            console.log(result2);
+            res.send('New room created');
+        }
+    })
+});
 
 //Create Course
 app.post('/createcourse', function(req, res) {
