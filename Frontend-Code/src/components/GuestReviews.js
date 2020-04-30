@@ -4,7 +4,7 @@ import {Route} from 'react-router-dom';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
 
-class HostReviews extends Component {
+class GuestReviews extends Component {
 
     state = {
         reviewlist: [
@@ -16,7 +16,7 @@ class HostReviews extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:3001/getreviewshost')
+        axios.get('http://localhost:3001/getreviewsguest')
             .then((response) => {
                 console.log(response);
                 this.setState({ reviewlist: response.data });
@@ -32,7 +32,7 @@ class HostReviews extends Component {
                         <th>Num</th>
                         <th>Text</th>
                         <th>Time</th>
-                        <th>Guest</th>
+                        <th>Host</th>
                     </tr>
                 {this.state.reviewlist.map((c) => (
 
@@ -41,7 +41,7 @@ class HostReviews extends Component {
                         <td>{c.Re_Num}</td>
                         <td>{c.Re_Text}</td>
                         <td>{c.Re_Time}</td>
-                        <td>{c.G_email_addr}</td>
+                        <td>{c.H_email_addr}</td>
                       </tr>
                     </React.Fragment>
                 ))}
@@ -51,4 +51,4 @@ class HostReviews extends Component {
     }
 }
 
-export default HostReviews
+export default GuestReviews

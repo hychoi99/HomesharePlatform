@@ -4,10 +4,10 @@ import {Route} from 'react-router-dom';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
 
-class HostPayments extends Component {
+class GuestReservations extends Component {
 
     state = {
-        paymentlist: [
+        reservlist: [
             {
                 courseid: 1,
                 title: 'CMPE-TEST'
@@ -16,34 +16,34 @@ class HostPayments extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:3001/getpaymentshost')
+        axios.get('http://localhost:3001/getreservationsguest')
             .then((response) => {
                 console.log(response);
-                this.setState({ paymentlist: response.data });
+                this.setState({ reservlist: response.data });
             });
     }
 
     render() {
         return (
             <div>
-                <h3>Your Payments</h3>
+                <h3>Your Reservations</h3>
                 <table>
                     <tr>
-                        <th>Number</th>
-                        <th>Time</th>
-                        <th>Amount</th>
-                        <th>Guest</th>
-                        <th>Host</th>
+                        <th>From date</th>
+                        <th>To date</th>
+                        <th>Room ID</th>
+                        <th>Host Email</th>
+                        <th>Room Addr</th>
                     </tr>
-                {this.state.paymentlist.map((c) => (
+                {this.state.reservlist.map((c) => (
 
-                    <React.Fragment key={c.P_Num}>
+                    <React.Fragment key={c.From_date}>
                       <tr>
-                        <td>{c.P_Num}</td>
-                        <td>{c.P_Time}</td>
-                        <td>{c.P_Amount}</td>
-                        <td>{c.G_email_addr}</td>
+                        <td>{c.From_date}</td>
+                        <td>{c.To_date}</td>
+                        <td>{c.R_ID}</td>
                         <td>{c.H_email_addr}</td>
+                        <td>{c.R_Addr}</td>
                       </tr>
                     </React.Fragment>
                 ))}
@@ -53,4 +53,4 @@ class HostPayments extends Component {
     }
 }
 
-export default HostPayments
+export default GuestReservations

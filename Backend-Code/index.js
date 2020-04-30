@@ -338,6 +338,19 @@ app.get('/getreviewshost', function(req, res) {
         }
     })
 })
+app.get('/getreservationshost', function(req, res) {
+    console.log("Inside getreservationshost");
+    let sql = `SELECT * FROM RESERVED_BY WHERE H_email_addr = '${loggedInUserEmail}'`;
+    console.log(sql);
+    let query = db.query(sql, (err, result) => {
+        if (err) {
+            throw err;
+        } else {
+            console.log(result);
+            res.send(result);
+        }
+    })
+})
 app.post('/addroom', function(req, res) {
     console.log("Inside addroom");
     console.log("Req Body : ", req.body);
@@ -359,6 +372,45 @@ app.post('/addroom', function(req, res) {
         }
     })
 });
+app.get('/getreservationsguest', function(req, res) {
+    console.log("Inside getreservationsguest");
+    let sql = `SELECT * FROM RESERVED_BY WHERE G_email_addr = '${loggedInUserEmail}'`;
+    console.log(sql);
+    let query = db.query(sql, (err, result) => {
+        if (err) {
+            throw err;
+        } else {
+            console.log(result);
+            res.send(result);
+        }
+    })
+})
+app.get('/getpaymentsguest', function(req, res) {
+    console.log("Inside getpaymentsguest");
+    let sql = `SELECT * FROM payment WHERE G_email_addr = '${loggedInUserEmail}'`;
+    console.log(sql);
+    let query = db.query(sql, (err, result) => {
+        if (err) {
+            throw err;
+        } else {
+            console.log(result);
+            res.send(result);
+        }
+    })
+})
+app.get('/getreviewsguest', function(req, res) {
+    console.log("Inside getreviewsguest");
+    let sql = `SELECT * FROM reviews WHERE G_email_addr = '${loggedInUserEmail}'`;
+    console.log(sql);
+    let query = db.query(sql, (err, result) => {
+        if (err) {
+            throw err;
+        } else {
+            console.log(result);
+            res.send(result);
+        }
+    })
+})
 
 //Create Course
 app.post('/createcourse', function(req, res) {

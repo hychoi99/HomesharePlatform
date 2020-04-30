@@ -4,10 +4,10 @@ import {Route} from 'react-router-dom';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
 
-class HostReviews extends Component {
+class HostReservations extends Component {
 
     state = {
-        reviewlist: [
+        reservlist: [
             {
                 courseid: 1,
                 title: 'CMPE-TEST'
@@ -16,32 +16,34 @@ class HostReviews extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:3001/getreviewshost')
+        axios.get('http://localhost:3001/getreservationshost')
             .then((response) => {
                 console.log(response);
-                this.setState({ reviewlist: response.data });
+                this.setState({ reservlist: response.data });
             });
     }
 
     render() {
         return (
             <div>
-                <h3>Your Reviews</h3>
+                <h3>Your Reservations</h3>
                 <table>
                     <tr>
-                        <th>Num</th>
-                        <th>Text</th>
-                        <th>Time</th>
-                        <th>Guest</th>
+                        <th>From date</th>
+                        <th>To date</th>
+                        <th>Room ID</th>
+                        <th>Guest Email</th>
+                        <th>Room Addr</th>
                     </tr>
-                {this.state.reviewlist.map((c) => (
+                {this.state.reservlist.map((c) => (
 
-                    <React.Fragment key={c.Re_Num}>
+                    <React.Fragment key={c.From_date}>
                       <tr>
-                        <td>{c.Re_Num}</td>
-                        <td>{c.Re_Text}</td>
-                        <td>{c.Re_Time}</td>
+                        <td>{c.From_date}</td>
+                        <td>{c.To_date}</td>
+                        <td>{c.R_ID}</td>
                         <td>{c.G_email_addr}</td>
+                        <td>{c.R_Addr}</td>
                       </tr>
                     </React.Fragment>
                 ))}
@@ -51,4 +53,4 @@ class HostReviews extends Component {
     }
 }
 
-export default HostReviews
+export default HostReservations

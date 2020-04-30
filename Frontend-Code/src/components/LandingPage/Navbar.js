@@ -68,8 +68,21 @@ class Navbar extends Component {
                     <ul className="nav navbar-nav navbar-right">
                             <li className="active"><Link to="/home">Home</Link></li>
                             <li><Link to="/home">My Rooms</Link></li>
+                            <li><Link to="/hostreservations">My Reservations</Link></li>
                             <li><Link to="/hostpayments">My Payments</Link></li>
                             <li><Link to="/hostreviews">My Reviews</Link></li>
+                            <br />
+                            <li><Link to="/" onClick = {this.handleLogout}><span className="glyphicon glyphicon-user"></span>Logout</Link></li>
+                    </ul>
+                );
+            } else if (this.props.authorization === 'guest') {
+                navLogin = (
+                    <ul className="nav navbar-nav navbar-right">
+                            <li className="active"><Link to="/home">Home</Link></li>
+                            <li><Link to="/searchrooms">Search for Room</Link></li>
+                            <li><Link to="/guestreservations">My Reservations</Link></li>
+                            <li><Link to="/guestpayments">My Payments</Link></li>
+                            <li><Link to="/guestreviews">My Reviews</Link></li>
                             <br />
                             <li><Link to="/" onClick = {this.handleLogout}><span className="glyphicon glyphicon-user"></span>Logout</Link></li>
                     </ul>

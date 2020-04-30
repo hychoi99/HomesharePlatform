@@ -14,6 +14,11 @@ import HostRooms from './HostRooms';
 import HostPayments from './HostPayments';
 import HostReviews from './HostReviews';
 import HostAddRoom from './HostAddRoom';
+import HostReservations from './HostReservations';
+
+import GuestReservations from './GuestReservations';
+import GuestPayments from './GuestPayments';
+import GuestReviews from './GuestReviews';
 
 //Create a Main Component
 class Main extends Component {
@@ -51,7 +56,7 @@ class Main extends Component {
         if (this.state.authorization === 'host') {
             home = (<Route path="/home" component={HostRooms}/>);
         } else if (this.state.authorization === 'guest') {
-            home = <Route path="/home" component={CourseList}/>
+            home = <Route path="/home" component={GuestReservations}/>
         } else {
             home = <Route path="/home" component={CourseList}/>
         }
@@ -78,7 +83,11 @@ class Main extends Component {
 
                 <Route path="/hostreviews" component={HostReviews} />
                 <Route path="/hostpayments" component={HostPayments} />
+                <Route path="/hostreservations" component={HostReviews} />
                 <Route path="/addroom" component={HostAddRoom} />
+                <Route path="/guestreviews" component={GuestReviews} />
+                <Route path="/guestpayments" component={GuestPayments} />
+                <Route path="/guestreservations" component={GuestReservations} />
             </div>
         )
     }
