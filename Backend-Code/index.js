@@ -453,7 +453,7 @@ app.post('/addreservation', function(req, res) {
 });
 app.get('/getreservationsguest', function(req, res) {
     console.log("Inside getreservationsguest");
-    let sql = `SELECT * FROM RESERVED_BY WHERE G_email_addr = '${loggedInUserEmail}'`;
+    let sql = `SELECT * FROM RESERVED_BY JOIN rooms ON reserved_by.R_ID = rooms.R_ID WHERE G_email_addr = '${loggedInUserEmail}'`;
     console.log(sql);
     let query = db.query(sql, (err, result) => {
         if (err) {
