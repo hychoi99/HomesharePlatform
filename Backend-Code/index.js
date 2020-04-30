@@ -459,8 +459,19 @@ app.get('/getreviewsguest', function(req, res) {
     })
 })
 app.get('/getroomsguest', function(req, res) {
-    console.log("Inside getreviewsguest");
-    let sql = `SELECT * FROM rooms`;
+    console.log("Inside get rooms guest");
+    console.log("hello",req.query.state);
+    let condition = '';
+    if (req.query.city !== undefined && req.query.city != '') {
+    	condition += " AND locate_on.R_City = '" + req.query.city + "' ";
+    }
+    if (req.query.state !== undefined && req.query.state != '') {
+    	condition += " AND locate_on.R_State = '" + req.query.state + "' ";
+    }
+    if (req.query.country !== undefined && req.query.country != '') {
+    	condition += " AND locate_on.R_Country = '" + req.query.country + "' ";
+    }
+    let sql = `SELECT * FROM rooms JOIN locate_on WHERE rooms.R_ID = locate_on.R_ID ` + condition;
     console.log(sql);
     let query = db.query(sql, (err, result) => {
         if (err) {
