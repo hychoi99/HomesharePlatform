@@ -79,7 +79,7 @@ class Navbar extends Component {
                 navLogin = (
                     <ul className="nav navbar-nav navbar-right">
                             <li className="active"><Link to="/home">Home</Link></li>
-                            <li><Link to="/searchrooms">Search for Room</Link></li>
+                            <li><Link to="/guestsearchrooms">Search for Room</Link></li>
                             <li><Link to="/guestreservations">My Reservations</Link></li>
                             <li><Link to="/guestpayments">My Payments</Link></li>
                             <li><Link to="/guestreviews">My Reviews</Link></li>

@@ -351,6 +351,39 @@ app.get('/getreservationshost', function(req, res) {
         }
     })
 })
+app.get('/getlocations', function(req, res) {
+    console.log("Inside getreviewsguest");
+    let sql = `SELECT DISTINCT R_City FROM location`;
+    let sql1 = `SELECT DISTINCT R_State FROM location`;
+    let sql2 = `SELECT DISTINCT R_Country FROM location`;
+    console.log(sql);
+    let returnarr = [];
+    let query = db.query(sql, (err, result) => {
+        if (err) {
+            throw err;
+        } else {
+            console.log(result);
+            let query1 = db.query(sql1, (err1, result1) => {
+		        if (err1) {
+		            throw err1;
+		        } else {
+		            console.log(result1);
+		            let query2 = db.query(sql2, (err2, result2) => {
+				        if (err2) {
+				            throw err2;
+				        } else {
+				            console.log(result2);
+				            returnarr[0] = result;
+				            returnarr[1] = result1;
+				            returnarr[2] = result2;
+				            res.send(returnarr);
+				        }
+				    })
+		        }
+		    })
+        }
+    })
+})
 app.post('/addroom', function(req, res) {
     console.log("Inside addroom");
     console.log("Req Body : ", req.body);
@@ -359,16 +392,30 @@ app.post('/addroom', function(req, res) {
     let maxguest = req.body.maxguest;
     let addr = req.body.addr;
     let status = req.body.status;
+    let city = req.body.city;
+    let state = req.body.state;
+    let country = req.body.country;
 
     sql = 'INSERT INTO rooms SET ?'
-    post = {R_ID: Math.random()*10000, H_email_addr: loggedInUserEmail, R_Price: price, R_Type: type, R_MaxGuest: maxguest, R_Addr: addr, R_Status: status};
+    sql2 = 'INSERT INTO LOCATE_ON SET?'
+    let rid = Math.random()*10000;
+    post = {R_ID: rid, H_email_addr: loggedInUserEmail, R_Price: price, R_Type: type, R_MaxGuest: maxguest, R_Addr: addr, R_Status: status};
+    post2 = {R_ID: rid, H_email_addr: loggedInUserEmail, R_City: city, R_State: state, R_Country: country};
     query = db.query(sql, post, (err2, result2) => {
         if (err2) {
             console.log(err2);
             throw err2;
         } else {
             console.log(result2);
-            res.send('New room created');
+            query2 = db.query(sql2, post2, (err3, result3) => {
+		        if (err3) {
+		            console.log(err3);
+		            throw err3;
+		        } else {
+		            console.log(result3);
+		            res.send('New room created');
+		        }
+		    })
         }
     })
 });
@@ -401,6 +448,19 @@ app.get('/getpaymentsguest', function(req, res) {
 app.get('/getreviewsguest', function(req, res) {
     console.log("Inside getreviewsguest");
     let sql = `SELECT * FROM reviews WHERE G_email_addr = '${loggedInUserEmail}'`;
+    console.log(sql);
+    let query = db.query(sql, (err, result) => {
+        if (err) {
+            throw err;
+        } else {
+            console.log(result);
+            res.send(result);
+        }
+    })
+})
+app.get('/getroomsguest', function(req, res) {
+    console.log("Inside getreviewsguest");
+    let sql = `SELECT * FROM rooms`;
     console.log(sql);
     let query = db.query(sql, (err, result) => {
         if (err) {

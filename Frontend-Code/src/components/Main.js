@@ -19,6 +19,7 @@ import HostReservations from './HostReservations';
 import GuestReservations from './GuestReservations';
 import GuestPayments from './GuestPayments';
 import GuestReviews from './GuestReviews';
+import GuestSearchRooms from './GuestSearchRooms';
 
 //Create a Main Component
 class Main extends Component {
@@ -88,6 +89,7 @@ class Main extends Component {
                 <Route path="/guestreviews" component={GuestReviews} />
                 <Route path="/guestpayments" component={GuestPayments} />
                 <Route path="/guestreservations" component={GuestReservations} />
+                <Route path="/guestsearchrooms" component={GuestSearchRooms} />
             </div>
         )
     }
