@@ -129,6 +129,11 @@ class GuestSearchRooms extends Component {
                         <td>{c.R_State}</td>
                         <td>{c.R_Country}</td>
                         <td>{c.R_Status}</td>
+                        <td>
+                            <React.Fragment key={c.R_ID}>
+                                <Link to={`/reserveroom/${c.R_ID}`}>Reserve</Link>
+                            </React.Fragment>
+                        </td>
                       </tr>
                     </React.Fragment>
                 ))}

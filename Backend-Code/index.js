@@ -419,6 +419,38 @@ app.post('/addroom', function(req, res) {
         }
     })
 });
+app.post('/addreservation', function(req, res) {
+    console.log("Inside addreservation");
+    console.log("Req Body : ", req.body);
+    let fromdate = req.body.fromdate;
+    let todate = req.body.todate;
+    let hostemail = req.body.hostemail;
+    let rid = req.body.rid;
+    let cost = req.body.cost;
+
+    sql = 'INSERT INTO reserved_by SET ?'
+    sql2 = 'INSERT INTO payment SET?'
+    let pnum = Math.random()*10000;
+    post = {From_date: fromdate, To_date: todate, G_email_addr: loggedInUserEmail, R_ID: rid, H_email_addr: hostemail};
+    post2 = {P_Num: pnum, P_Time: new Date(), P_Amount: cost, G_email_addr: loggedInUserEmail, H_email_addr: hostemail};
+    query = db.query(sql, post, (err2, result2) => {
+        if (err2) {
+            console.log(err2);
+            throw err2;
+        } else {
+            console.log(result2);
+            query2 = db.query(sql2, post2, (err3, result3) => {
+		        if (err3) {
+		            console.log(err3);
+		            throw err3;
+		        } else {
+		            console.log(result3);
+		            res.send('New room created');
+		        }
+		    })
+        }
+    })
+});
 app.get('/getreservationsguest', function(req, res) {
     console.log("Inside getreservationsguest");
     let sql = `SELECT * FROM RESERVED_BY WHERE G_email_addr = '${loggedInUserEmail}'`;
@@ -472,6 +504,20 @@ app.get('/getroomsguest', function(req, res) {
     	condition += " AND locate_on.R_Country = '" + req.query.country + "' ";
     }
     let sql = `SELECT * FROM rooms JOIN locate_on WHERE rooms.R_ID = locate_on.R_ID ` + condition;
+    console.log(sql);
+    let query = db.query(sql, (err, result) => {
+        if (err) {
+            throw err;
+        } else {
+            console.log(result);
+            res.send(result);
+        }
+    })
+})
+app.get('/getroominfo', function(req, res) {
+    console.log("Inside getroominfo");
+
+    let sql = `SELECT * FROM rooms JOIN locate_on WHERE rooms.R_ID = locate_on.R_ID ` + 'AND rooms.R_ID = ' + req.query.roomid;;
     console.log(sql);
     let query = db.query(sql, (err, result) => {
         if (err) {
