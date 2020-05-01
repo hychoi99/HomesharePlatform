@@ -21,6 +21,7 @@ import GuestPayments from './GuestPayments';
 import GuestReviews from './GuestReviews';
 import GuestSearchRooms from './GuestSearchRooms';
 import ReserveRoom from './ReserveRoom';
+import GuestWriteReview from './GuestWriteReview';
 
 //Create a Main Component
 class Main extends Component {
@@ -85,13 +86,14 @@ class Main extends Component {
 
                 <Route path="/hostreviews" component={HostReviews} />
                 <Route path="/hostpayments" component={HostPayments} />
-                <Route path="/hostreservations" component={HostReviews} />
+                <Route path="/hostreservations" component={HostReservations} />
                 <Route path="/addroom" component={HostAddRoom} />
                 <Route path="/guestreviews" component={GuestReviews} />
                 <Route path="/guestpayments" component={GuestPayments} />
                 <Route path="/guestreservations" component={GuestReservations} />
                 <Route path="/guestsearchrooms" component={GuestSearchRooms} />
                 <Route path="/reserveroom/:id" component={ReserveRoom} />
+                <Route path="/writereview/:id" component={GuestWriteReview} />
             </div>
         )
     }

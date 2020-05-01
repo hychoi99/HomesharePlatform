@@ -44,6 +44,11 @@ class GuestReservations extends Component {
                         <td>{c.R_ID}</td>
                         <td>{c.H_email_addr}</td>
                         <td>{c.R_Addr}</td>
+                        <td>
+                            <React.Fragment key={c.R_ID}>
+                                <Link to={`/writereview/${c.R_ID}`}>Review</Link>
+                            </React.Fragment>
+                        </td>
                       </tr>
                     </React.Fragment>
                 ))}

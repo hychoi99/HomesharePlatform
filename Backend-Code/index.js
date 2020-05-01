@@ -340,7 +340,7 @@ app.get('/getreviewshost', function(req, res) {
 })
 app.get('/getreservationshost', function(req, res) {
     console.log("Inside getreservationshost");
-    let sql = `SELECT * FROM RESERVED_BY WHERE H_email_addr = '${loggedInUserEmail}'`;
+    let sql = `SELECT * FROM RESERVED_BY JOIN rooms ON reserved_by.R_ID = rooms.R_ID WHERE rooms.H_email_addr = '${loggedInUserEmail}'`;
     console.log(sql);
     let query = db.query(sql, (err, result) => {
         if (err) {
@@ -445,9 +445,28 @@ app.post('/addreservation', function(req, res) {
 		            throw err3;
 		        } else {
 		            console.log(result3);
-		            res.send('New room created');
+		            res.send('New reservation created');
 		        }
 		    })
+        }
+    })
+});
+app.post('/addreview', function(req, res) {
+    console.log("Inside addreview");
+    console.log("Req Body : ", req.body);
+    let reviewtext = req.body.reviewtext;
+    let hostemail = req.body.hostemail;
+
+    sql = 'INSERT INTO reviews SET ?'
+    let renum = Math.random()*10000;
+    post = {Re_Num: renum, Re_Text: reviewtext, Re_Time: new Date(), G_email_addr: loggedInUserEmail, H_email_addr: hostemail};
+    query = db.query(sql, post, (err2, result2) => {
+        if (err2) {
+            console.log(err2);
+            throw err2;
+        } else {
+            console.log(result2);
+		    res.send('New review created');
         }
     })
 });
