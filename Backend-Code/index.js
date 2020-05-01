@@ -384,6 +384,20 @@ app.get('/getlocations', function(req, res) {
         }
     })
 })
+app.get('/getamenities', function(req, res) {
+    console.log("Inside getamenities");
+    let sql = `SELECT * FROM amenities`;
+    console.log(sql);
+    let returnarr = [];
+    let query = db.query(sql, (err, result) => {
+        if (err) {
+            throw err;
+        } else {
+            console.log(result);
+            res.send(result);
+        }
+    })
+})
 app.post('/addroom', function(req, res) {
     console.log("Inside addroom");
     console.log("Req Body : ", req.body);
@@ -395,9 +409,10 @@ app.post('/addroom', function(req, res) {
     let city = req.body.city;
     let state = req.body.state;
     let country = req.body.country;
+    let amenities = req.body.amenities;
 
-    sql = 'INSERT INTO rooms SET ?'
-    sql2 = 'INSERT INTO LOCATE_ON SET?'
+    sql = 'INSERT INTO rooms SET ?';
+    sql2 = 'INSERT INTO LOCATE_ON SET?';
     let rid = Math.random()*10000;
     post = {R_ID: rid, H_email_addr: loggedInUserEmail, R_Price: price, R_Type: type, R_MaxGuest: maxguest, R_Addr: addr, R_Status: status};
     post2 = {R_ID: rid, H_email_addr: loggedInUserEmail, R_City: city, R_State: state, R_Country: country};
@@ -413,11 +428,23 @@ app.post('/addroom', function(req, res) {
 		            throw err3;
 		        } else {
 		            console.log(result3);
-		            res.send('New room created');
 		        }
 		    })
         }
     })
+    amenities.forEach(function(entry) {
+    	sql = 'INSERT INTO offers SET ?';
+    	post = {R_ID: rid, H_email_addr: loggedInUserEmail, A_Name: entry};
+    	query = db.query(sql, post, (err, result) => {
+    		if (err) {
+    			console.log(err);
+    			throw err;
+    		} else {
+    			console.log(result);
+    		}
+    	})
+	});
+	res.send('New room created');
 });
 app.post('/addreservation', function(req, res) {
     console.log("Inside addreservation");

@@ -14,7 +14,9 @@ class HostAddRoom extends Component {
         countries: [],
         city: '',
         state: '',
-        country: ''
+        country: '',
+        amenities: [],
+        checkedAmenities: []
     }
 
     componentDidMount() {
@@ -26,10 +28,30 @@ class HostAddRoom extends Component {
                     this.setState({ states: response.data[1]});
                     this.setState({ countries: response.data[2]});
             });
+        axios.get('http://localhost:3001/getamenities')
+                .then((response) => {
+                    console.log(response);
+                    this.setState({ amenities: response.data });
+            });
     }
 
     onChangeInput = (e) => {
         this.setState({ [e.target.name]: e.target.value});
+    }
+
+    onAmenitiesCheck = (e) => {
+        if (e.target.checked) {
+            let tempAmen = this.state.checkedAmenities;
+            tempAmen.push(e.target.name);
+            this.setState({ checkedAmenities: tempAmen });
+        } else {
+            let index = this.state.checkedAmenities.indexOf(e.target.name);
+            if (index > -1) {
+                let tempAmen = this.state.checkedAmenities;
+                tempAmen.splice(index, 1);
+                this.setState({ checkedAmenities: tempAmen });
+            }
+        }
     }
 
     onSubmitProfile = (e) => {
@@ -43,7 +65,8 @@ class HostAddRoom extends Component {
             status: this.state.status,
             city: this.state.city,
             state: this.state.state,
-            country: this.state.country
+            country: this.state.country,
+            amenities: this.state.checkedAmenities
         }
         //set the with credentials to true
         axios.defaults.withCredentials = true;
@@ -59,6 +82,7 @@ class HostAddRoom extends Component {
 
     render() {
         let submitstatus = this.state.authflag ? 'Room Added!' : '';
+        console.log("checked: ",this.state.checkedAmenities);
         return(
             <div>
                 <br/>
@@ -121,6 +145,15 @@ class HostAddRoom extends Component {
                                 </React.Fragment>
                             ))}
                         </select>
+                    </div>
+                    <div style={{width: '50%'}} className="form-group">
+                        <p>Amenities: </p>
+                        {this.state.amenities.map((c) => (
+
+                            <React.Fragment key={c.A_Name}>
+                              <input  onChange = {this.onAmenitiesCheck} type="checkbox" className="form-control" name={c.A_Name} />{c.A_Name}
+                            </React.Fragment>
+                        ))}
                     </div>
                     <br/>
                     <div style={{width: '30%'}}>
