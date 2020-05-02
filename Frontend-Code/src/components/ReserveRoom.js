@@ -10,14 +10,16 @@ class ReserveRoom extends Component {
         todate: '',
         hostemail: '',
         cost: '',
-        nights: ''
+        nights: '',
+        amenitylist: []
     }
 
     componentDidMount() {
         console.log("test",this.props.match.params.id);
         axios.get('http://localhost:3001/getroominfo', {
             params: {
-                roomid: this.props.match.params.id
+                roomid: this.props.match.params.id,
+                hostemail: this.props.match.params.hostemail
             }
         })
             .then((response) => {
@@ -25,6 +27,16 @@ class ReserveRoom extends Component {
                 this.setState({ addr: response.data[0].R_Addr });
                 this.setState({ price: response.data[0].R_Price });
                 this.setState({ hostemail: response.data[0].H_email_addr });
+        });
+        axios.get('http://localhost:3001/getroomamenities', {
+            params: {
+                roomid: this.props.match.params.id,
+                hostemail: this.props.match.params.hostemail
+            }
+        })
+            .then((response2) => {
+                console.log(response2);
+                this.setState({ amenitylist: response2.data });
         });
     }
 
@@ -79,8 +91,15 @@ class ReserveRoom extends Component {
                     <h3>Reservation for: {this.state.addr}</h3>
                     <h3>Hosted by: {this.state.hostemail}</h3>
                     <h3>Price per night: ${this.state.price}</h3>
+                    <div style={{width: '90%'}} className="form-group">
+                        <h5>Amenities Offered:</h5>
+                        {this.state.amenitylist.map((c) => (
+                            <React.Fragment key={c.A_Name}>
+                              {c.A_Name},
+                            </React.Fragment>
+                        ))}
+                    </div>
                     <br/>
-                    
                     <div style={{width: '30%'}} className="form-group">
                         <p>From Date: </p>
                         <input  onChange = {this.onChangeInput} type="date" className="form-control" name="fromdate" />

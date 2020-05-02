@@ -92,8 +92,8 @@ class Main extends Component {
                 <Route path="/guestpayments" component={GuestPayments} />
                 <Route path="/guestreservations" component={GuestReservations} />
                 <Route path="/guestsearchrooms" component={GuestSearchRooms} />
-                <Route path="/reserveroom/:id" component={ReserveRoom} />
-                <Route path="/writereview/:id" component={GuestWriteReview} />
+                <Route path="/reserveroom/:id/:hostemail" component={ReserveRoom} />
+                <Route path="/writereview/:id/:hostemail" component={GuestWriteReview} />
             </div>
         )
     }

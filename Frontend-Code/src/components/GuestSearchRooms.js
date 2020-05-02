@@ -47,11 +47,11 @@ class GuestSearchRooms extends Component {
         let country = '';
         let parameters = "?";
         if (e.target.name == "city" && e.target.value != "") {
-            parameters = parameters + "&city=" + e.target.value;
+            parameters = parameters + "&city=" + e.target.value + "&state=" + this.state.state + "&country=" + this.state.country;
         } else if (e.target.name == "state" && e.target.value != "") {
-            parameters = parameters + "&state=" + e.target.value;
+            parameters = parameters + "&state=" + e.target.value + "&city=" + this.state.city + "&country=" + this.state.country;
         } else if (e.target.name == "country" && e.target.value != "") {
-            parameters = parameters + "&country=" + e.target.value;
+            parameters = parameters + "&country=" + e.target.value + "&state=" + this.state.state + "&city=" + this.state.city;
         }
         axios.get('http://localhost:3001/getroomsguest' + parameters)
             .then((response) => {
@@ -60,7 +60,24 @@ class GuestSearchRooms extends Component {
             });
     }
 
+    canReserve =(e) => {
+        if (e.available != "unavailable") {
+            return "<Link to={`/reserveroom/${c.R_ID}/${c.H_email_addr}`}>Reserve</Link>"
+        }
+        return "<Link to={`/reserveroom/${c.R_ID}/${c.H_email_addr}`}>Reserve</Link>"
+    }
+
+
     render() {
+
+        const renderAuthButton = (c)=>{
+              if(c.R_Status != "unavailable"){
+                return <Link to={`/reserveroom/${c.R_ID}/${c.H_email_addr}`}>Reserve</Link>
+              } else{
+                return
+              }
+            }
+
         return (
             <div>
                 <h3>Search Rooms</h3>
@@ -117,7 +134,7 @@ class GuestSearchRooms extends Component {
                     </tr>
                 {this.state.roomlist.map((c) => (
 
-                    <React.Fragment key={c.R_ID}>
+                    <React.Fragment>
                       <tr>
                         <td>{c.R_ID}</td>
                         <td>{c.H_email_addr}</td>
@@ -130,9 +147,7 @@ class GuestSearchRooms extends Component {
                         <td>{c.R_Country}</td>
                         <td>{c.R_Status}</td>
                         <td>
-                            <React.Fragment key={c.R_ID}>
-                                <Link to={`/reserveroom/${c.R_ID}`}>Reserve</Link>
-                            </React.Fragment>
+                        {renderAuthButton(c)}
                         </td>
                       </tr>
                     </React.Fragment>

@@ -340,7 +340,7 @@ app.get('/getreviewshost', function(req, res) {
 })
 app.get('/getreservationshost', function(req, res) {
     console.log("Inside getreservationshost");
-    let sql = `SELECT * FROM RESERVED_BY JOIN rooms ON reserved_by.R_ID = rooms.R_ID WHERE rooms.H_email_addr = '${loggedInUserEmail}'`;
+    let sql = `SELECT * FROM RESERVED_BY JOIN rooms ON reserved_by.R_ID = rooms.R_ID AND reserved_by.H_email_addr = rooms.H_email_addr WHERE rooms.H_email_addr = '${loggedInUserEmail}'`;
     console.log(sql);
     let query = db.query(sql, (err, result) => {
         if (err) {
@@ -455,8 +455,9 @@ app.post('/addreservation', function(req, res) {
     let rid = req.body.rid;
     let cost = req.body.cost;
 
-    sql = 'INSERT INTO reserved_by SET ?'
-    sql2 = 'INSERT INTO payment SET?'
+    sql = 'INSERT INTO reserved_by SET ?';
+    sql2 = 'INSERT INTO payment SET?';
+    sql3 = `UPDATE rooms SET rooms.R_Status = 'unavailable' WHERE rooms.R_ID = ${rid}`;
     let pnum = Math.random()*10000;
     post = {From_date: fromdate, To_date: todate, G_email_addr: loggedInUserEmail, R_ID: rid, H_email_addr: hostemail};
     post2 = {P_Num: pnum, P_Time: new Date(), P_Amount: cost, G_email_addr: loggedInUserEmail, H_email_addr: hostemail};
@@ -472,6 +473,15 @@ app.post('/addreservation', function(req, res) {
 		            throw err3;
 		        } else {
 		            console.log(result3);
+		            query3 = db.query(sql3, post3, (err4, result4) => {
+				        if (err4) {
+				            console.log(err4);
+				            throw err4;
+				        } else {
+				            console.log(result4);
+				            res.send('New reservation created');
+				        }
+				    })
 		            res.send('New reservation created');
 		        }
 		    })
@@ -499,7 +509,7 @@ app.post('/addreview', function(req, res) {
 });
 app.get('/getreservationsguest', function(req, res) {
     console.log("Inside getreservationsguest");
-    let sql = `SELECT * FROM RESERVED_BY JOIN rooms ON reserved_by.R_ID = rooms.R_ID WHERE G_email_addr = '${loggedInUserEmail}'`;
+    let sql = `SELECT * FROM RESERVED_BY JOIN rooms ON reserved_by.R_ID = rooms.R_ID AND reserved_by.H_email_addr = rooms.H_email_addr WHERE G_email_addr = '${loggedInUserEmail}'`;
     console.log(sql);
     let query = db.query(sql, (err, result) => {
         if (err) {
@@ -549,13 +559,27 @@ app.get('/getroomsguest', function(req, res) {
     if (req.query.country !== undefined && req.query.country != '') {
     	condition += " AND locate_on.R_Country = '" + req.query.country + "' ";
     }
-    let sql = `SELECT * FROM rooms JOIN locate_on WHERE rooms.R_ID = locate_on.R_ID ` + condition;
+    let sql = `SELECT * FROM rooms JOIN locate_on WHERE rooms.R_ID = locate_on.R_ID AND rooms.H_email_addr = locate_on.H_email_addr ` + condition;
     console.log(sql);
     let query = db.query(sql, (err, result) => {
         if (err) {
             throw err;
         } else {
-            console.log(result);
+            console.log("Result",result);
+            res.send(result);
+        }
+    })
+})
+app.get('/getroomamenities', function(req, res) {
+    console.log("Inside getroomamenities");
+    console.log(req.query);
+    let sql = `SELECT * FROM offers WHERE offers.R_ID=${req.query.roomid} AND offers.H_email_addr=`+ "'" + req.query.hostemail + "'";
+    console.log(sql);
+    let query = db.query(sql, (err, result) => {
+        if (err) {
+            throw err;
+        } else {
+            console.log("Result",result);
             res.send(result);
         }
     })
@@ -563,7 +587,7 @@ app.get('/getroomsguest', function(req, res) {
 app.get('/getroominfo', function(req, res) {
     console.log("Inside getroominfo");
 
-    let sql = `SELECT * FROM rooms JOIN locate_on WHERE rooms.R_ID = locate_on.R_ID ` + 'AND rooms.R_ID = ' + req.query.roomid;;
+    let sql = `SELECT * FROM rooms JOIN locate_on WHERE rooms.R_ID = locate_on.R_ID ` + 'AND rooms.R_ID = ' + req.query.roomid + ' AND rooms.H_email_addr = \''+req.query.hostemail+'\'';
     console.log(sql);
     let query = db.query(sql, (err, result) => {
         if (err) {
