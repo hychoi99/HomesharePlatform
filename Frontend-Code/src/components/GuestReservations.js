@@ -10,7 +10,9 @@ class GuestReservations extends Component {
         reservlist: [
             {
                 courseid: 1,
-                title: 'CMPE-TEST'
+                title: 'CMPE-TEST',
+                From_date: '',
+                To_date: ''
             }
         ]
     }
@@ -39,14 +41,14 @@ class GuestReservations extends Component {
 
                     <React.Fragment key={c.From_date}>
                       <tr>
-                        <td>{c.From_date}</td>
-                        <td>{c.To_date}</td>
+                        <td>{c.From_date.substring(0, 10)}</td>
+                        <td>{c.To_date.substring(0, 10)}</td>
                         <td>{c.R_ID}</td>
                         <td>{c.H_email_addr}</td>
                         <td>{c.R_Addr}</td>
                         <td>
-                            <React.Fragment key={c.R_ID}>
-                                <Link to={`/writereview/${c.R_ID}`}>Review</Link>
+                            <React.Fragment>
+                                <Link to={`/writereview/${c.R_ID}/${c.H_email_addr}`}>Review</Link>
                             </React.Fragment>
                         </td>
                       </tr>

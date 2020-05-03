@@ -7,6 +7,16 @@ var app = express();
 var crypto = require('crypto');
 const mysql = require('mysql');
 
+var fs = require('fs');
+var util = require('util');
+var log_file = fs.createWriteStream(__dirname + '/debug.log', {flags : 'w'});
+var log_stdout = process.stdout;
+
+console.logsave = function(d) { //
+  log_file.write(new Date() + util.format(d) + '\n');
+  log_stdout.write(util.format(d) + '\n');
+};
+
 
 // Create connection
 const db = mysql.createConnection({
@@ -20,9 +30,11 @@ const db = mysql.createConnection({
 db.connect((err) => {
     if (err) {
         console.log(err);
+        console.logsave(err);
         throw err;
     } else {
         console.log('MySql Connected');
+        console.logsave('MySql Connected');
     }
 });
 
@@ -77,7 +89,7 @@ app.get('/home', function(req,res) {
 var myuserid;
 //Route to handle Post Request Call
 app.post('/login', function(req,res) {
-    console.log("Inside Login Post Request");
+    console.logsave("Inside Login Post Request");
     console.log("Req Body : ", req.body);
     let inputUsername = req.body.username;
     let inputPassword = req.body.password;
@@ -91,7 +103,7 @@ app.post('/login', function(req,res) {
     } else if (acctType == "guest") {
     	sql = `SELECT * FROM guests WHERE Email_addr = '${inputUsername}'`
     } else {
-    	console.log("Error1");
+    	console.logsave("Error1");
     }
 
 
@@ -144,13 +156,13 @@ app.post('/login', function(req,res) {
 app.get('/logout', function(req, res) {
     loggedInUserEmail = '';
     acctTypeGlobal = "no";
-    console.log("Userid reset!");
+    console.logsave("Userid reset!");
     res.end();
 });
 
 //Signup New User
 app.post('/signup', function(req, res) {
-    console.log("Inside Signup Request");
+    console.logsave("Inside Signup Request");
     console.log("Req Body : ", req.body);
     let inputUsername = req.body.username;
     let inputPassword = req.body.password;
@@ -171,7 +183,7 @@ app.post('/signup', function(req, res) {
     } else if (acctType == "guest") {
     	sql = `INSERT INTO guests SET ?`;
     } else {
-    	console.log("Error");
+    	console.logsave("Error");
     	res.send("Acct Type Error");
     }
 
@@ -195,7 +207,7 @@ app.post('/signup', function(req, res) {
         if (err) {
             throw err;
         } else {
-            console.log(result);
+            console.logsave(result);
             res.send('User inserted!');
         }
     })
@@ -203,7 +215,7 @@ app.post('/signup', function(req, res) {
 
 //Get Auth
 app.get('/getauth', function(req,res) {
-    console.log("Inside Get /Auth Request");
+    console.logsave("Inside Get /Auth Request");
     console.log(acctTypeGlobal);
     res.send(acctTypeGlobal);
     // let sql = `SELECT authorization FROM user WHERE userid = ${loggedInUserid}`;
@@ -573,7 +585,7 @@ app.get('/getroomsguest', function(req, res) {
 app.get('/getroomamenities', function(req, res) {
     console.log("Inside getroomamenities");
     console.log(req.query);
-    let sql = `SELECT * FROM offers WHERE offers.R_ID=${req.query.roomid} AND offers.H_email_addr=`+ "'" + req.query.hostemail + "'";
+    let sql = `SELECT * FROM offered_amenities WHERE offered_amenities.R_ID=${req.query.roomid} AND offered_amenities.H_email_addr=`+ "'" + req.query.hostemail + "'";
     console.log(sql);
     let query = db.query(sql, (err, result) => {
         if (err) {
@@ -587,7 +599,7 @@ app.get('/getroomamenities', function(req, res) {
 app.get('/getroominfo', function(req, res) {
     console.log("Inside getroominfo");
 
-    let sql = `SELECT * FROM rooms JOIN locate_on WHERE rooms.R_ID = locate_on.R_ID ` + 'AND rooms.R_ID = ' + req.query.roomid + ' AND rooms.H_email_addr = \''+req.query.hostemail+'\'';
+    let sql = `SELECT * FROM roomsWithLocation  WHERE ` + 'roomsWithLocation.R_ID = ' + req.query.roomid + ' AND roomsWithLocation.H_email_addr = \''+req.query.hostemail+'\'';
     console.log(sql);
     let query = db.query(sql, (err, result) => {
         if (err) {
@@ -598,6 +610,41 @@ app.get('/getroominfo', function(req, res) {
         }
     })
 })
+// db.beginTransaction(function(err, req) {
+//     let fromdate = req.fromdate;
+//     let todate = req.todate;
+//     let hostemail = req.hostemail;
+//     let rid = req.rid;
+//     let cost = req.cost;
+//     let pnum = req.P_Num;
+//   let post2 = {P_Num: pnum, P_Time: new Date(), P_Amount: cost, G_email_addr: loggedInUserEmail, H_email_addr: hostemail};
+//   if (err) { throw err; }
+//   db.query('INSERT INTO payment SET ?', post2, function(err, result) {
+//     if (err) { 
+//       db.rollback(function() {
+//         throw err;
+//       });
+//     }
+
+//     var log = 'Post ' + result.insertId + ' added';
+
+//     // db.query('INSERT INTO log SET data=?', log, function(err, result) {
+//     //   if (err) { 
+//     //     db.rollback(function() {
+//     //       throw err;
+//     //     });
+//     //   }  
+//     //   db.commit(function(err) {
+//     //     if (err) { 
+//     //       db.rollback(function() {
+//     //         throw err;
+//     //       });
+//     //     }
+//     //     console.log('success!');
+//     //   });
+//     // });
+//   });
+// });
 
 //Create Course
 app.post('/createcourse', function(req, res) {

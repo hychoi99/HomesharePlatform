@@ -10,7 +10,9 @@ class HostReservations extends Component {
         reservlist: [
             {
                 courseid: 1,
-                title: 'CMPE-TEST'
+                title: 'CMPE-TEST',
+                From_date: '',
+                To_date: ''
             }
         ]
     }
@@ -39,8 +41,8 @@ class HostReservations extends Component {
 
                     <React.Fragment key={c.From_date}>
                       <tr>
-                        <td>{c.From_date}</td>
-                        <td>{c.To_date}</td>
+                        <td>{c.From_date.substring(0, 10)}</td>
+                        <td>{c.To_date.substring(0, 10)}</td>
                         <td>{c.R_ID}</td>
                         <td>{c.G_email_addr}</td>
                         <td>{c.R_Addr}</td>

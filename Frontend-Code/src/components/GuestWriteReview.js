@@ -7,14 +7,14 @@ class GuestWriteReview extends Component {
         addr: '',
         hostemail: '',
         reviewtext: '',
-        hostemail: '',
     }
 
     componentDidMount() {
         console.log("test",this.props.match.params.id);
         axios.get('http://localhost:3001/getroominfo', {
             params: {
-                roomid: this.props.match.params.id
+                roomid: this.props.match.params.id,
+                hostemail: this.props.match.params.hostemail
             }
         })
             .then((response) => {
