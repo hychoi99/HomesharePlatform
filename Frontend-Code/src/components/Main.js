@@ -3,12 +3,7 @@ import {Route} from 'react-router-dom';
 import axios from 'axios';
 import Login from './Login/Login';
 import Navbar from './LandingPage/Navbar';
-import UpdateProfile from './UpdateProfile/UpdateProfile';
 import Signup from './Signup';
-import CourseList from './CourseStudent/CourseList';
-import CourseRegister from './CourseStudent/CourseRegister';
-import CourseListFaculty from './CourseFaculty/CourseListFaculty';
-import CourseCreate from './CourseFaculty/CourseCreate';
 
 import HostRooms from './HostRooms';
 import HostPayments from './HostPayments';
@@ -48,20 +43,13 @@ class Main extends Component {
 
     render(){
         let home = null;
-        if (this.state.authorization === 'faculty') {
-            home = (<Route path="/home" component={CourseListFaculty}/>);
-        } else if (this.state.authorization === 'student') {
-            home = <Route path="/home" component={CourseList}/>
-        } else {
-            home = <Route path="/home" component={CourseList}/>
-        }
 
         if (this.state.authorization === 'host') {
             home = (<Route path="/home" component={HostRooms}/>);
         } else if (this.state.authorization === 'guest') {
             home = <Route path="/home" component={GuestReservations}/>
         } else {
-            home = <Route path="/home" component={CourseList}/>
+            home = <Route path="/home" component={HostRooms}/>
         }
 
         return(
@@ -76,13 +64,6 @@ class Main extends Component {
                 <Route path="/signup" component={Signup} />
                 {home}
                 {/*<Route path="/updateprofile" component={UpdateProfile}/>*/}
-                <Route path="/updateprofile" render={ (props) => 
-                    <UpdateProfile {...props} userId={this.state.userId} />
-                }/>
-                <Route path="/courseliststudent" component={CourseList} />
-                <Route path="/courseregisterstudent" component={CourseRegister} />
-                <Route path="/courselistfaculty" component={CourseListFaculty} />
-                <Route path="/coursecreate" component={CourseCreate} />
 
                 <Route path="/hostreviews" component={HostReviews} />
                 <Route path="/hostpayments" component={HostPayments} />
