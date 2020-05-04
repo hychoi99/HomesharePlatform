@@ -1,3 +1,4 @@
+//SJSU CMPE 226 Spring 2020 TEAM5
 import React,{Component} from 'react';
 import {Link} from 'react-router-dom';
 import cookie from 'react-cookies';

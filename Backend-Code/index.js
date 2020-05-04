@@ -1,6 +1,4 @@
-//Author: Yul Choi
-//Calculator App
-//index.js
+//SJSU CMPE 226 Spring 2020 TEAM5
 
 var express = require('express');
 var app = express();
@@ -508,7 +506,7 @@ app.get('/getroomamenities', function(req, res) {
     console.log("Inside getroomamenities");
     console.log(req.query);
     let sql = `SELECT * FROM offered_amenities WHERE offered_amenities.R_ID=${req.query.roomid} 
-    AND offered_amenities.H_email_addr=`+ "'" + req.query.hostemail + "'";
+    		AND offered_amenities.H_email_addr=`+ "'" + req.query.hostemail + "'";
     console.log(sql);
     let query = db.query(sql, (err, result) => {
         if (err) {

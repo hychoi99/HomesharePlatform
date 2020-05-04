@@ -1,3 +1,4 @@
+//SJSU CMPE 226 Spring 2020 TEAM5
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';

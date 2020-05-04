@@ -1,6 +1,8 @@
+//SJSU CMPE 226 Spring 2020 TEAM5
 import React, {Component} from 'react';
 import '../../App.css';
 import axios from 'axios';
+//SJSU CMPE 226 Spring 2020 TEAM5
 import cookie from 'react-cookies';
 import {Redirect} from 'react-router';
 
