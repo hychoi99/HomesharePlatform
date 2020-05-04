@@ -2,10 +2,10 @@
 -- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: May 04, 2020 at 03:33 AM
+-- Host: localhost
+-- Generation Time: Apr 30, 2020 at 02:20 AM
 -- Server version: 10.4.11-MariaDB
--- PHP Version: 7.4.5
+-- PHP Version: 7.2.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -21,271 +21,70 @@ SET time_zone = "+00:00";
 -- Database: `home_share_platform`
 --
 
-DELIMITER $$
---
--- Procedures
---
-CREATE DEFINER=`root`@`localhost` PROCEDURE `Load_Data` (OUT `LOGINFO` VARCHAR(255))  BEGIN
-		DECLARE total_count_payment,  total_count_reviews, total_count_guests, total_count_host,
-			total_count_rooms, total_count_reservedby, total_count_amenities, total_count_offers, total_count_locateon, total_count_location INT DEFAULT 0;    		
-         DECLARE LOGINFO_INSERT VARCHAR(255) DEFAULT "DATALOAD: ";
-         DECLARE LOGINFO_NOINSERT VARCHAR(255) DEFAULT "NO DATALOAD: ";
-         SET LOGINFO = "";
-        SELECT COUNT(*) INTO total_count_payment FROM payment;
-		SELECT COUNT(*) INTO total_count_reviews FROM reviews;
-		SELECT COUNT(*) INTO total_count_guests FROM guests;
-		SELECT COUNT(*) INTO total_count_host FROM host;
-		SELECT COUNT(*) INTO total_count_rooms FROM rooms;
-		SELECT COUNT(*) INTO total_count_reservedby FROM reserved_by;
-		SELECT COUNT(*) INTO total_count_amenities FROM amenities;
-		SELECT COUNT(*) INTO total_count_offers FROM offers;
-		SELECT COUNT(*) INTO total_count_locateon FROM locate_on;
-		SELECT COUNT(*) INTO total_count_location FROM location;
-       
-        IF total_count_location = 0 THEN
-			INSERT INTO LOCATION VALUES
-			('San Jose','CA','USA'),
-			('Santa Clara','CA','USA'),
-			('San Francisco','CA','USA'),
-			('Mountain View','CA','USA'),
-			('Sacramento','CA','USA'),
-			('Vacaville','CA','USA');		
-           SET LOGINFO_INSERT = CONCAT(LOGINFO_INSERT, 'LOCATION ');
-		ELSE
-			SET LOGINFO_NOINSERT = CONCAT(LOGINFO_NOINSERT, 'LOCATION ');
-		END IF;
-        
-        IF total_count_host = 0 THEN
-			INSERT INTO `HOST` (`Email_addr`, `Phone_num`, `F_name`, `L_name`, `Password_encrypted`, `Gender`) VALUES
-			('host1@gmail.com', '9876543210', 'Amy', 'Black', '3c56aafa21488c24fe9ecb68ba8478778184c131fd422444c4a6b8f305260b4af28be8f29dd23ffa7ed6aa9dc9b8d2691ce3d8d3ad9cab0e77f42f4bf945a966', 'Female'),
-            ('host2@gmail.com', '9876543212', 'Shawn', 'Booth', '3c56aafa21488c24fe9ecb68ba8478778184c131fd422444c4a6b8f305260b4af28be8f29dd23ffa7ed6aa9dc9b8d2691ce3d8d3ad9cab0e77f42f4bf945a966', 'Male'),
-            ('host3@gmail.com', '9876543213', 'Kate', 'Larkin', '3c56aafa21488c24fe9ecb68ba8478778184c131fd422444c4a6b8f305260b4af28be8f29dd23ffa7ed6aa9dc9b8d2691ce3d8d3ad9cab0e77f42f4bf945a966', 'Female'),
-            ('host4@gmail.com', '9876543214', 'Dana', 'Schumer', '3c56aafa21488c24fe9ecb68ba8478778184c131fd422444c4a6b8f305260b4af28be8f29dd23ffa7ed6aa9dc9b8d2691ce3d8d3ad9cab0e77f42f4bf945a966', 'Female'),
-            ('host5@gmail.com', '9876543215', 'Phoebe', 'Hind', '3c56aafa21488c24fe9ecb68ba8478778184c131fd422444c4a6b8f305260b4af28be8f29dd23ffa7ed6aa9dc9b8d2691ce3d8d3ad9cab0e77f42f4bf945a966', 'Female');
-           SET LOGINFO_INSERT = CONCAT(LOGINFO_INSERT, 'HOST ');
-		ELSE
-			SET LOGINFO_NOINSERT = CONCAT(LOGINFO_NOINSERT, 'HOST ');
-		END IF;
-        
-         IF total_count_guests = 0 THEN
-			INSERT INTO `GUESTS` (`Email_addr`, `Phone_num`, `F_name`, `L_name`, `Password_encrypted`, `Gender`) VALUES
-			('guest1@sample.com', '1234567890', 'John', 'Smith', '3c56aafa21488c24fe9ecb68ba8478778184c131fd422444c4a6b8f305260b4af28be8f29dd23ffa7ed6aa9dc9b8d2691ce3d8d3ad9cab0e77f42f4bf945a966', 'Male'),
-			('guest2@gmail.com', '1234567892', 'Amy', 'Knight', '3c56aafa21488c24fe9ecb68ba8478778184c131fd422444c4a6b8f305260b4af28be8f29dd23ffa7ed6aa9dc9b8d2691ce3d8d3ad9cab0e77f42f4bf945a966', 'Female'),
-            ('guest3@gmail.com', '8876543212', 'Rick', 'Ponting', '3c56aafa21488c24fe9ecb68ba8478778184c131fd422444c4a6b8f305260b4af28be8f29dd23ffa7ed6aa9dc9b8d2691ce3d8d3ad9cab0e77f42f4bf945a966', 'Male'),
-            ('guest4@gmail.com', '8876543213', 'Teresa', 'Hills', '3c56aafa21488c24fe9ecb68ba8478778184c131fd422444c4a6b8f305260b4af28be8f29dd23ffa7ed6aa9dc9b8d2691ce3d8d3ad9cab0e77f42f4bf945a966', 'Female'),
-            ('guest5@gmail.com', '6876543214', 'Patrick', 'Jane', '3c56aafa21488c24fe9ecb68ba8478778184c131fd422444c4a6b8f305260b4af28be8f29dd23ffa7ed6aa9dc9b8d2691ce3d8d3ad9cab0e77f42f4bf945a966', 'Female');            
-           SET LOGINFO_INSERT = CONCAT(LOGINFO_INSERT, 'GUESTS ');
-		ELSE
-			SET LOGINFO_NOINSERT = CONCAT(LOGINFO_NOINSERT, 'GUESTS ');
-		END IF;
-        
-         IF total_count_amenities = 0 THEN
-			INSERT INTO `AMENITIES` (`A_Type`, `A_Desc`, `A_Name`) VALUES
-				('Facilities', 'There are a lot of spaces outside for parking.', 'Free street parking'),
-				('Basic', 'Continuous access in the listing.', 'WIFI'),
-                ('Bed and bath', 'Shower in room.', 'Shower'),
-                ('Basic', 'Central heating available in the listing.', 'Heating');          
-           SET LOGINFO_INSERT = CONCAT(LOGINFO_INSERT, 'AMENITIES ');
-		ELSE
-			SET LOGINFO_NOINSERT = CONCAT(LOGINFO_NOINSERT, 'AMENITIES ');
-		END IF;
-        
-          IF total_count_rooms = 0 THEN
-			INSERT INTO `ROOMS` (`R_ID`, `H_email_addr`, `R_Price`, `R_Type`, `R_MaxGuest`, `R_Addr`, `R_Status`) VALUES
-				(1, 'host1@gmail.com', 50, 'Shared room', 1, '1111, 31st', 'available'),         
-                (2, 'host1@gmail.com', 80, 'Private room', 2, '2222, 71st', 'available'),
-                (1, 'host2@gmail.com', 50, 'Shared room', 2, '444, 1st', 'available'),
-                (2, 'host2@gmail.com', 70, 'Private room', 2, '333, 7th', 'available'),
-                (3, 'host2@gmail.com', 100, 'Private room', 3, '236, 21st', 'available'),
-                (1, 'host3@gmail.com', 70, 'Private room', 2, '523, 1st', 'available'),
-                (1, 'host4@gmail.com', 60, 'Private room', 2, '741, 1st', 'available'),
-                (2, 'host4@gmail.com', 50, 'Shared room', 1, '563, 15th', 'available'),
-                (3, 'host4@gmail.com', 50, 'Shared room', 1, '21, 1st', 'available'),
-                (1, 'host5@gmail.com', 120, 'Private room', 3, '89, 5th', 'available');
-           SET LOGINFO_INSERT = CONCAT(LOGINFO_INSERT, 'ROOMS ');
-		ELSE
-			SET LOGINFO_NOINSERT = CONCAT(LOGINFO_NOINSERT, 'ROOMS ');
-		END IF;
-        
-        IF total_count_offers = 0 THEN
-			INSERT INTO `OFFERS` (`R_ID`, `H_email_addr`, `A_Name`) VALUES
-				(1, 'host1@gmail.com', 'WIFI'),         
-                (1, 'host1@gmail.com', 'Shower'),
-                (1, 'host1@gmail.com', 'Free street parking'),
-                (2, 'host1@gmail.com', 'WIFI'),
-                (2, 'host1@gmail.com', 'Heating'),
-                (1, 'host2@gmail.com', 'WIFI'),
-                (1, 'host2@gmail.com', 'Heating'),
-                (2, 'host2@gmail.com', 'WIFI'),
-                (2, 'host2@gmail.com', 'Heating'),                
-                (3, 'host2@gmail.com', 'WIFI'),
-                (3, 'host2@gmail.com', 'Shower'),
-                (3, 'host2@gmail.com', 'Heating'),
-                (1, 'host3@gmail.com', 'WIFI'),
-                (1, 'host3@gmail.com', 'Shower'),
-                (1, 'host3@gmail.com', 'Heating'),
-                (1, 'host3@gmail.com', 'Free street parking'),
-                (1, 'host4@gmail.com', 'WIFI'),
-                (1, 'host4@gmail.com', 'Shower'),
-                (2, 'host4@gmail.com', 'WIFI'),
-                (3, 'host4@gmail.com', 'WIFI'),
-                (1, 'host5@gmail.com', 'WIFI'),
-                (1, 'host5@gmail.com', 'Shower'),
-                (1, 'host5@gmail.com', 'Heating');
-           SET LOGINFO_INSERT = CONCAT(LOGINFO_INSERT, 'OFFERS ');
-		ELSE
-			SET LOGINFO_NOINSERT = CONCAT(LOGINFO_NOINSERT, 'OFFERS ');
-		END IF;
-        
-        IF total_count_locateon = 0 THEN
-			INSERT INTO `LOCATE_ON` (`R_ID`, `H_email_addr`, `R_City`, `R_State`, `R_Country`) VALUES
-				(1, 'host1@gmail.com', 'San Jose','CA','USA'),
-                (2, 'host1@gmail.com', 'San Jose','CA','USA'),
-                (1, 'host2@gmail.com', 'Santa Clara','CA','USA'),
-                (2, 'host2@gmail.com', 'San Francisco','CA','USA'),
-                (3, 'host2@gmail.com', 'Mountain View','CA','USA'),
-                (1, 'host3@gmail.com', 'San Jose','CA','USA'),
-                (1, 'host4@gmail.com', 'Sacramento','CA','USA'),
-                (2, 'host4@gmail.com', 'Vacaville','CA','USA'),
-                (3, 'host4@gmail.com', 'Santa Clara','CA','USA'),
-                (1, 'host5@gmail.com', 'San Jose','CA','USA');
-           SET LOGINFO_INSERT = CONCAT(LOGINFO_INSERT, 'LOCATE_ON ');
-		ELSE
-			SET LOGINFO_NOINSERT = CONCAT(LOGINFO_NOINSERT, 'LOCATE_ON ');
-		END IF;
-        
-        IF total_count_reservedby = 0 THEN
-			INSERT INTO `RESERVED_BY` (`From_date`, `To_date`, `G_email_addr`, `R_ID`, `H_email_addr`) VALUES
-				('2020-04-27', '2020-04-28', 'guest1@sample.com', 1, 'host1@gmail.com'),
-				('2020-04-25', '2020-04-26', 'guest2@gmail.com', 2, 'host1@gmail.com'),
-				('2020-03-27', '2020-03-28', 'guest4@gmail.com', 2, 'host1@gmail.com'),
-				('2020-02-05', '2020-02-06', 'guest2@gmail.com', 1, 'host5@gmail.com'),
-				('2020-01-20', '2020-01-21', 'guest1@sample.com', 1, 'host5@gmail.com'),
-				('2020-02-14', '2020-02-15', 'guest4@gmail.com', 1, 'host5@gmail.com'),
-				('2020-01-08', '2020-01-09', 'guest3@gmail.com', 1, 'host5@gmail.com'),
-				('2020-02-16', '2020-02-17', 'guest1@sample.com', 1, 'host3@gmail.com');
-			SET LOGINFO_INSERT = CONCAT(LOGINFO_INSERT, 'reserved_by ');
-		ELSE
-			SET LOGINFO_NOINSERT = CONCAT(LOGINFO_NOINSERT, 'reserved_by ');
-		END IF;
-        
-        IF total_count_payment = 0 THEN
-		INSERT INTO `PAYMENT` (`P_Num`, `P_Time`, `P_Amount`, `G_email_addr`, `H_email_addr`) VALUES				
-				(1, '2020-04-28 19:05:46', 50, 'guest1@sample.com', 'host1@gmail.com'),
-				(2, '2020-04-26 19:05:46', 80, 'guest2@gmail.com', 'host1@gmail.com'),
-				(3, '2020-03-28 19:05:46', 80, 'guest4@gmail.com', 'host1@gmail.com'),
-				(4, '2020-02-06 19:05:46', 120, 'guest2@gmail.com', 'host5@gmail.com'),
-				(5, '2020-01-21 19:05:46', 120, 'guest1@sample.com', 'host5@gmail.com'),
-				(6, '2020-02-14 19:05:46', 120, 'guest4@gmail.com', 'host5@gmail.com'),
-				(7, '2020-01-08 19:05:46', 120, 'guest3@gmail.com', 'host5@gmail.com'),
-				(8, '2020-02-16 19:05:46', 70, 'guest1@sample.com', 'host3@gmail.com');		
-			SET LOGINFO_INSERT = CONCAT(LOGINFO_INSERT, 'PAYMENT ');
-		ELSE
-			SET LOGINFO_NOINSERT = CONCAT(LOGINFO_NOINSERT, 'PAYMENT ');
-		END IF;
-        
-        IF total_count_reviews = 0 THEN
-		INSERT INTO `REVIEWS` (`Re_Num`, `Re_Text`, `Re_Time`, `G_email_addr`, `H_email_addr`) VALUES		
-				(1, 'This a good trip.',  '2020-04-28 19:05:46', 'guest1@sample.com', 'host1@gmail.com'),
-				(2, 'Host is nice',  '2020-04-26 19:05:46', 'guest2@gmail.com', 'host1@gmail.com'),
-				(3, 'Good room.',  '2020-03-28 19:05:46',  'guest4@gmail.com', 'host1@gmail.com'),
-				(4, 'This a good trip. clean room',  '2020-02-06 19:05:46',  'guest2@gmail.com', 'host5@gmail.com'),
-				(5, 'This a good trip. good host',  '2020-01-21 19:05:46',  'guest1@sample.com', 'host5@gmail.com'),
-				(6, 'This a good trip. Nice host',  '2020-02-14 19:05:46',  'guest4@gmail.com', 'host5@gmail.com'),
-				(7, 'Clean Room',  '2020-01-08 19:05:46',  'guest3@gmail.com', 'host5@gmail.com'),
-				(8, 'Good room.',  '2020-02-16 19:05:46',  'guest1@sample.com', 'host3@gmail.com');		
-			SET LOGINFO_INSERT = CONCAT(LOGINFO_INSERT, 'REVIEWS ');
-		ELSE
-			SET LOGINFO_NOINSERT = CONCAT(LOGINFO_NOINSERT, 'REVIEWS ');
-		END IF;
-        
-        SET LOGINFO = CONCAT(LOGINFO_INSERT, LOGINFO_NOINSERT);
-		 -- select total_count_payment,  total_count_reviews, total_count_guests, total_count_host, total_count_rooms, total_count_reservedby, total_count_amenities, total_count_offers, total_count_locateon, total_count_location;
-      END$$
-
-DELIMITER ;
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `amenities`
+-- Table structure for table `AMENITIES`
 --
 
-CREATE TABLE `amenities` (
-  `A_Type` varchar(255) NOT NULL,
+CREATE TABLE `AMENITIES` (
+  `A_Type` varchar(25) NOT NULL,
   `A_Desc` varchar(255) NOT NULL,
   `A_Name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `amenities`
+-- Dumping data for table `AMENITIES`
 --
 
-INSERT INTO `amenities` (`A_Type`, `A_Desc`, `A_Name`) VALUES
-('Facilities', 'There are a lot of spaces outside for parking.', 'Free street parking'),
-('Basic', 'Central heating available in the listing.', 'Heating'),
-('Bed and bath', 'Shower in room.', 'Shower'),
-('Basic', 'Continuous access in the listing.', 'WIFI');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `guests`
+-- Table structure for table `GUESTS`
 --
 
-CREATE TABLE `guests` (
+CREATE TABLE `GUESTS` (
   `Email_addr` varchar(255) NOT NULL,
-  `Phone_num` char(31) NOT NULL,
-  `F_name` char(255) NOT NULL,
-  `L_name` char(255) NOT NULL,
+  `Phone_num` char(10) NOT NULL,
+  `F_name` varchar(15) NOT NULL,
+  `L_name` varchar(15) NOT NULL,
   `Password_encrypted` varchar(255) NOT NULL,
-  `Gender` char(255) NOT NULL
+  `Gender` varchar(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `guests`
+-- Dumping data for table `GUESTS`
 --
 
-INSERT INTO `guests` (`Email_addr`, `Phone_num`, `F_name`, `L_name`, `Password_encrypted`, `Gender`) VALUES
-('guest1@sample.com', '1234567890', 'John', 'Smith', '3c56aafa21488c24fe9ecb68ba8478778184c131fd422444c4a6b8f305260b4af28be8f29dd23ffa7ed6aa9dc9b8d2691ce3d8d3ad9cab0e77f42f4bf945a966', 'Male'),
-('guest2@gmail.com', '1234567892', 'Amy', 'Knight', '3c56aafa21488c24fe9ecb68ba8478778184c131fd422444c4a6b8f305260b4af28be8f29dd23ffa7ed6aa9dc9b8d2691ce3d8d3ad9cab0e77f42f4bf945a966', 'Female'),
-('guest3@gmail.com', '8876543212', 'Rick', 'Ponting', '3c56aafa21488c24fe9ecb68ba8478778184c131fd422444c4a6b8f305260b4af28be8f29dd23ffa7ed6aa9dc9b8d2691ce3d8d3ad9cab0e77f42f4bf945a966', 'Male'),
-('guest4@gmail.com', '8876543213', 'Teresa', 'Hills', '3c56aafa21488c24fe9ecb68ba8478778184c131fd422444c4a6b8f305260b4af28be8f29dd23ffa7ed6aa9dc9b8d2691ce3d8d3ad9cab0e77f42f4bf945a966', 'Female'),
-('guest5@gmail.com', '6876543214', 'Patrick', 'Jane', '3c56aafa21488c24fe9ecb68ba8478778184c131fd422444c4a6b8f305260b4af28be8f29dd23ffa7ed6aa9dc9b8d2691ce3d8d3ad9cab0e77f42f4bf945a966', 'Female');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `host`
+-- Table structure for table `HOST`
 --
 
-CREATE TABLE `host` (
+CREATE TABLE `HOST` (
   `Email_addr` varchar(255) NOT NULL,
-  `Phone_num` char(31) NOT NULL,
-  `F_name` char(255) NOT NULL,
-  `L_name` char(255) NOT NULL,
+  `Phone_num` char(10) NOT NULL,
+  `F_name` varchar(15) NOT NULL,
+  `L_name` varchar(15) NOT NULL,
   `Password_encrypted` varchar(255) NOT NULL,
-  `Gender` char(255) NOT NULL
+  `Gender` varchar(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `host`
+-- Dumping data for table `HOST`
 --
 
-INSERT INTO `host` (`Email_addr`, `Phone_num`, `F_name`, `L_name`, `Password_encrypted`, `Gender`) VALUES
-('host1@gmail.com', '9876543210', 'Amy', 'Black', '3c56aafa21488c24fe9ecb68ba8478778184c131fd422444c4a6b8f305260b4af28be8f29dd23ffa7ed6aa9dc9b8d2691ce3d8d3ad9cab0e77f42f4bf945a966', 'Female'),
-('host2@gmail.com', '9876543212', 'Shawn', 'Booth', '3c56aafa21488c24fe9ecb68ba8478778184c131fd422444c4a6b8f305260b4af28be8f29dd23ffa7ed6aa9dc9b8d2691ce3d8d3ad9cab0e77f42f4bf945a966', 'Male'),
-('host3@gmail.com', '9876543213', 'Kate', 'Larkin', '3c56aafa21488c24fe9ecb68ba8478778184c131fd422444c4a6b8f305260b4af28be8f29dd23ffa7ed6aa9dc9b8d2691ce3d8d3ad9cab0e77f42f4bf945a966', 'Female'),
-('host4@gmail.com', '9876543214', 'Dana', 'Schumer', '3c56aafa21488c24fe9ecb68ba8478778184c131fd422444c4a6b8f305260b4af28be8f29dd23ffa7ed6aa9dc9b8d2691ce3d8d3ad9cab0e77f42f4bf945a966', 'Female'),
-('host5@gmail.com', '9876543215', 'Phoebe', 'Hind', '3c56aafa21488c24fe9ecb68ba8478778184c131fd422444c4a6b8f305260b4af28be8f29dd23ffa7ed6aa9dc9b8d2691ce3d8d3ad9cab0e77f42f4bf945a966', 'Female');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `locate_on`
+-- Table structure for table `LOCATE_ON`
 --
 
-CREATE TABLE `locate_on` (
+CREATE TABLE `LOCATE_ON` (
   `R_ID` int(31) NOT NULL,
   `H_email_addr` varchar(255) NOT NULL,
   `R_City` varchar(20) NOT NULL,
@@ -293,109 +92,44 @@ CREATE TABLE `locate_on` (
   `R_Country` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `locate_on`
---
-
-INSERT INTO `locate_on` (`R_ID`, `H_email_addr`, `R_City`, `R_State`, `R_Country`) VALUES
-(1, 'host1@gmail.com', 'San Jose', 'CA', 'USA'),
-(1, 'host2@gmail.com', 'Santa Clara', 'CA', 'USA'),
-(1, 'host3@gmail.com', 'San Jose', 'CA', 'USA'),
-(1, 'host4@gmail.com', 'Sacramento', 'CA', 'USA'),
-(1, 'host5@gmail.com', 'San Jose', 'CA', 'USA'),
-(2, 'host1@gmail.com', 'San Jose', 'CA', 'USA'),
-(2, 'host2@gmail.com', 'San Francisco', 'CA', 'USA'),
-(2, 'host4@gmail.com', 'Vacaville', 'CA', 'USA'),
-(3, 'host2@gmail.com', 'Mountain View', 'CA', 'USA'),
-(3, 'host4@gmail.com', 'Santa Clara', 'CA', 'USA');
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `location`
+-- Table structure for table `LOCATION`
 --
 
-CREATE TABLE `location` (
+CREATE TABLE `LOCATION` (
   `R_City` varchar(20) NOT NULL,
   `R_State` varchar(20) NOT NULL,
   `R_Country` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `location`
+-- Dumping data for table `LOCATION`
 --
 
-INSERT INTO `location` (`R_City`, `R_State`, `R_Country`) VALUES
-('Mountain View', 'CA', 'USA'),
-('Sacramento', 'CA', 'USA'),
-('San Francisco', 'CA', 'USA'),
-('San Jose', 'CA', 'USA'),
-('Santa Clara', 'CA', 'USA'),
-('Vacaville', 'CA', 'USA');
+
 
 -- --------------------------------------------------------
 
 --
--- Stand-in structure for view `offered_amenities`
--- (See below for the actual view)
---
-CREATE TABLE `offered_amenities` (
-`A_Name` varchar(255)
-,`R_ID` int(31)
-,`H_email_addr` varchar(255)
-,`A_Type` varchar(255)
-,`A_Desc` varchar(255)
-);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `offers`
+-- Table structure for table `OFFERS`
 --
 
-CREATE TABLE `offers` (
+CREATE TABLE `OFFERS` (
   `R_ID` int(31) NOT NULL,
   `H_email_addr` varchar(255) NOT NULL,
   `A_Name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `offers`
---
-
-INSERT INTO `offers` (`R_ID`, `H_email_addr`, `A_Name`) VALUES
-(1, 'host1@gmail.com', 'Free street parking'),
-(1, 'host1@gmail.com', 'Shower'),
-(1, 'host1@gmail.com', 'WIFI'),
-(1, 'host2@gmail.com', 'Heating'),
-(1, 'host2@gmail.com', 'WIFI'),
-(1, 'host3@gmail.com', 'Free street parking'),
-(1, 'host3@gmail.com', 'Heating'),
-(1, 'host3@gmail.com', 'Shower'),
-(1, 'host3@gmail.com', 'WIFI'),
-(1, 'host4@gmail.com', 'Shower'),
-(1, 'host4@gmail.com', 'WIFI'),
-(1, 'host5@gmail.com', 'Heating'),
-(1, 'host5@gmail.com', 'Shower'),
-(1, 'host5@gmail.com', 'WIFI'),
-(2, 'host1@gmail.com', 'Heating'),
-(2, 'host1@gmail.com', 'WIFI'),
-(2, 'host2@gmail.com', 'Heating'),
-(2, 'host2@gmail.com', 'WIFI'),
-(2, 'host4@gmail.com', 'WIFI'),
-(3, 'host2@gmail.com', 'Heating'),
-(3, 'host2@gmail.com', 'Shower'),
-(3, 'host2@gmail.com', 'WIFI'),
-(3, 'host4@gmail.com', 'WIFI');
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `payment`
+-- Table structure for table `PAYMENT`
 --
 
-CREATE TABLE `payment` (
-  `P_Num` bigint(255) NOT NULL,
+CREATE TABLE `PAYMENT` (
+  `P_Num` int(11) NOT NULL,
   `P_Time` datetime NOT NULL,
   `P_Amount` int(31) NOT NULL,
   `G_email_addr` varchar(255) NOT NULL,
@@ -403,26 +137,14 @@ CREATE TABLE `payment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `payment`
---
-
-INSERT INTO `payment` (`P_Num`, `P_Time`, `P_Amount`, `G_email_addr`, `H_email_addr`) VALUES
-(1, '2020-04-28 19:05:46', 50, 'guest1@sample.com', 'host1@gmail.com'),
-(2, '2020-04-26 19:05:46', 80, 'guest2@gmail.com', 'host1@gmail.com'),
-(3, '2020-03-28 19:05:46', 80, 'guest4@gmail.com', 'host1@gmail.com'),
-(4, '2020-02-06 19:05:46', 120, 'guest2@gmail.com', 'host5@gmail.com'),
-(5, '2020-01-21 19:05:46', 120, 'guest1@sample.com', 'host5@gmail.com'),
-(6, '2020-02-14 19:05:46', 120, 'guest4@gmail.com', 'host5@gmail.com'),
-(7, '2020-01-08 19:05:46', 120, 'guest3@gmail.com', 'host5@gmail.com'),
-(8, '2020-02-16 19:05:46', 70, 'guest1@sample.com', 'host3@gmail.com');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `reserved_by`
+-- Table structure for table `RESERVED_BY`
 --
 
-CREATE TABLE `reserved_by` (
+CREATE TABLE `RESERVED_BY` (
   `From_date` date NOT NULL,
   `To_date` date NOT NULL,
   `G_email_addr` varchar(255) NOT NULL,
@@ -431,27 +153,19 @@ CREATE TABLE `reserved_by` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `reserved_by`
+-- Dumping data for table `RESERVED_BY`
 --
 
-INSERT INTO `reserved_by` (`From_date`, `To_date`, `G_email_addr`, `R_ID`, `H_email_addr`) VALUES
-('2020-04-27', '2020-04-28', 'guest1@sample.com', 1, 'host1@gmail.com'),
-('2020-02-16', '2020-02-17', 'guest1@sample.com', 1, 'host3@gmail.com'),
-('2020-01-20', '2020-01-21', 'guest1@sample.com', 1, 'host5@gmail.com'),
-('2020-02-05', '2020-02-06', 'guest2@gmail.com', 1, 'host5@gmail.com'),
-('2020-04-25', '2020-04-26', 'guest2@gmail.com', 2, 'host1@gmail.com'),
-('2020-01-08', '2020-01-09', 'guest3@gmail.com', 1, 'host5@gmail.com'),
-('2020-02-14', '2020-02-15', 'guest4@gmail.com', 1, 'host5@gmail.com'),
-('2020-03-27', '2020-03-28', 'guest4@gmail.com', 2, 'host1@gmail.com');
+
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `reviews`
+-- Table structure for table `REVIEWS`
 --
 
-CREATE TABLE `reviews` (
-  `Re_Num` bigint(255) NOT NULL,
+CREATE TABLE `REVIEWS` (
+  `Re_Num` int(11) NOT NULL,
   `Re_Text` varchar(1000) NOT NULL,
   `Re_Time` datetime NOT NULL,
   `G_email_addr` varchar(255) NOT NULL,
@@ -459,157 +173,104 @@ CREATE TABLE `reviews` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `reviews`
+-- Dumping data for table `REVIEWS`
 --
 
-INSERT INTO `reviews` (`Re_Num`, `Re_Text`, `Re_Time`, `G_email_addr`, `H_email_addr`) VALUES
-(1, 'This a good trip.', '2020-04-28 19:05:46', 'guest1@sample.com', 'host1@gmail.com'),
-(2, 'Host is nice', '2020-04-26 19:05:46', 'guest2@gmail.com', 'host1@gmail.com'),
-(3, 'Good room.', '2020-03-28 19:05:46', 'guest4@gmail.com', 'host1@gmail.com'),
-(4, 'This a good trip. clean room', '2020-02-06 19:05:46', 'guest2@gmail.com', 'host5@gmail.com'),
-(5, 'This a good trip. good host', '2020-01-21 19:05:46', 'guest1@sample.com', 'host5@gmail.com'),
-(6, 'This a good trip. Nice host', '2020-02-14 19:05:46', 'guest4@gmail.com', 'host5@gmail.com'),
-(7, 'Clean Room', '2020-01-08 19:05:46', 'guest3@gmail.com', 'host5@gmail.com'),
-(8, 'Good room.', '2020-02-16 19:05:46', 'guest1@sample.com', 'host3@gmail.com');
+
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `rooms`
+-- Table structure for table `ROOMS`
 --
 
-CREATE TABLE `rooms` (
+CREATE TABLE `ROOMS` (
   `R_ID` int(31) NOT NULL,
   `H_email_addr` varchar(255) NOT NULL,
   `R_Price` int(31) NOT NULL,
-  `R_Type` char(255) NOT NULL,
-  `R_MaxGuest` int(31) NOT NULL,
+  `R_Type` varchar(15) NOT NULL,
+  `R_MaxGuest` int(10) NOT NULL,
   `R_Addr` varchar(255) NOT NULL,
-  `R_Status` char(255) NOT NULL
+  `R_Status` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `rooms`
+-- Dumping data for table `ROOMS`
 --
 
-INSERT INTO `rooms` (`R_ID`, `H_email_addr`, `R_Price`, `R_Type`, `R_MaxGuest`, `R_Addr`, `R_Status`) VALUES
-(1, 'host1@gmail.com', 50, 'Shared room', 1, '1111, 31st', 'unavailable'),
-(1, 'host2@gmail.com', 50, 'Shared room', 2, '444, 1st', 'available'),
-(1, 'host3@gmail.com', 70, 'Private room', 2, '523, 1st', 'available'),
-(1, 'host4@gmail.com', 60, 'Private room', 2, '741, 1st', 'available'),
-(1, 'host5@gmail.com', 120, 'Private room', 3, '89, 5th', 'available'),
-(2, 'host1@gmail.com', 80, 'Private room', 2, '2222, 71st', 'available'),
-(2, 'host2@gmail.com', 70, 'Private room', 2, '333, 7th', 'available'),
-(2, 'host4@gmail.com', 50, 'Shared room', 1, '563, 15th', 'available'),
-(3, 'host2@gmail.com', 100, 'Private room', 3, '236, 21st', 'available'),
-(3, 'host4@gmail.com', 50, 'Shared room', 1, '21, 1st', 'available');
 
--- --------------------------------------------------------
-
---
--- Stand-in structure for view `roomswithlocation`
--- (See below for the actual view)
---
-CREATE TABLE `roomswithlocation` (
-`R_ID` int(31)
-,`H_email_addr` varchar(255)
-,`R_Price` int(31)
-,`R_Type` char(255)
-,`R_MaxGuest` int(31)
-,`R_Addr` varchar(255)
-,`R_Status` char(255)
-,`R_City` varchar(20)
-,`R_State` varchar(20)
-,`R_Country` varchar(20)
-);
-
--- --------------------------------------------------------
-
---
--- Structure for view `offered_amenities`
---
-DROP TABLE IF EXISTS `offered_amenities`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `offered_amenities`  AS  (select `offers`.`A_Name` AS `A_Name`,`offers`.`R_ID` AS `R_ID`,`offers`.`H_email_addr` AS `H_email_addr`,`amenities`.`A_Type` AS `A_Type`,`amenities`.`A_Desc` AS `A_Desc` from (`offers` join `amenities` on(`offers`.`A_Name` = `amenities`.`A_Name`))) ;
-
--- --------------------------------------------------------
-
---
--- Structure for view `roomswithlocation`
---
-DROP TABLE IF EXISTS `roomswithlocation`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `roomswithlocation`  AS  (select `rooms`.`R_ID` AS `R_ID`,`rooms`.`H_email_addr` AS `H_email_addr`,`rooms`.`R_Price` AS `R_Price`,`rooms`.`R_Type` AS `R_Type`,`rooms`.`R_MaxGuest` AS `R_MaxGuest`,`rooms`.`R_Addr` AS `R_Addr`,`rooms`.`R_Status` AS `R_Status`,`locate_on`.`R_City` AS `R_City`,`locate_on`.`R_State` AS `R_State`,`locate_on`.`R_Country` AS `R_Country` from (`rooms` join `locate_on` on(`rooms`.`R_ID` = `locate_on`.`R_ID` and `rooms`.`H_email_addr` = `locate_on`.`H_email_addr`))) ;
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `amenities`
+-- Indexes for table `AMENITIES`
 --
-ALTER TABLE `amenities`
+ALTER TABLE `AMENITIES`
   ADD PRIMARY KEY (`A_Name`);
 
 --
--- Indexes for table `guests`
+-- Indexes for table `GUESTS`
 --
-ALTER TABLE `guests`
+ALTER TABLE `GUESTS`
   ADD PRIMARY KEY (`Email_addr`);
 
 --
--- Indexes for table `host`
+-- Indexes for table `HOST`
 --
-ALTER TABLE `host`
+ALTER TABLE `HOST`
   ADD PRIMARY KEY (`Email_addr`);
 
 --
--- Indexes for table `locate_on`
+-- Indexes for table `LOCATE_ON`
 --
-ALTER TABLE `locate_on`
+ALTER TABLE `LOCATE_ON`
   ADD PRIMARY KEY (`R_ID`,`H_email_addr`,`R_City`,`R_State`,`R_Country`),
-  ADD KEY `Constraint_l_to_r` (`H_email_addr`,`R_ID`);
+  ADD KEY `Constraint_l_to_r` (`H_email_addr`,`R_ID`),
+  ADD KEY `Constraint_l_to_l` (`R_City`,`R_State`,`R_Country`);
 
 --
--- Indexes for table `location`
+-- Indexes for table `LOCATION`
 --
-ALTER TABLE `location`
+ALTER TABLE `LOCATION`
   ADD PRIMARY KEY (`R_City`,`R_State`,`R_Country`);
 
 --
--- Indexes for table `offers`
+-- Indexes for table `OFFERS`
 --
-ALTER TABLE `offers`
+ALTER TABLE `OFFERS`
   ADD PRIMARY KEY (`R_ID`,`H_email_addr`,`A_Name`),
-  ADD KEY `Constraint_off_r` (`H_email_addr`,`R_ID`);
+  ADD KEY `Constraint_off_r` (`H_email_addr`,`R_ID`),
+  ADD KEY `Constraint_off_a` (`A_Name`);
 
 --
--- Indexes for table `payment`
+-- Indexes for table `PAYMENT`
 --
-ALTER TABLE `payment`
-  ADD PRIMARY KEY (`P_Num`),
+ALTER TABLE `PAYMENT`
+  ADD PRIMARY KEY (`P_Num`,`G_email_addr`,`H_email_addr`),
   ADD KEY `Constraint_pa_to_g` (`G_email_addr`),
   ADD KEY `Constraint_pa_to_h` (`H_email_addr`);
 
 --
--- Indexes for table `reserved_by`
+-- Indexes for table `RESERVED_BY`
 --
-ALTER TABLE `reserved_by`
+ALTER TABLE `RESERVED_BY`
   ADD PRIMARY KEY (`G_email_addr`,`R_ID`,`H_email_addr`),
   ADD KEY `Constraint_res_to_r` (`R_ID`,`H_email_addr`);
 
 --
--- Indexes for table `reviews`
+-- Indexes for table `REVIEWS`
 --
-ALTER TABLE `reviews`
-  ADD PRIMARY KEY (`Re_Num`),
+ALTER TABLE `REVIEWS`
+  ADD PRIMARY KEY (`Re_Num`,`G_email_addr`,`H_email_addr`),
   ADD KEY `Constraint_re_to_g` (`G_email_addr`),
   ADD KEY `Constraint_re_to_h` (`H_email_addr`);
 
 --
--- Indexes for table `rooms`
+-- Indexes for table `ROOMS`
 --
-ALTER TABLE `rooms`
+ALTER TABLE `ROOMS`
   ADD PRIMARY KEY (`R_ID`,`H_email_addr`),
   ADD KEY `Constraint1` (`H_email_addr`);
 
@@ -618,37 +279,45 @@ ALTER TABLE `rooms`
 --
 
 --
--- Constraints for table `locate_on`
+-- Constraints for table `LOCATE_ON`
 --
-ALTER TABLE `locate_on`
-  ADD CONSTRAINT `Constraint_l_to_r` FOREIGN KEY (`H_email_addr`,`R_ID`) REFERENCES `rooms` (`H_email_addr`, `R_ID`);
+ALTER TABLE `LOCATE_ON`
+  ADD CONSTRAINT `Constraint_l_to_l` FOREIGN KEY (`R_City`,`R_State`,`R_Country`) REFERENCES `LOCATION` (`R_City`, `R_State`, `R_Country`),
+  ADD CONSTRAINT `Constraint_l_to_r` FOREIGN KEY (`H_email_addr`,`R_ID`) REFERENCES `ROOMS` (`H_email_addr`, `R_ID`);
 
 --
--- Constraints for table `payment`
+-- Constraints for table `OFFERS`
 --
-ALTER TABLE `payment`
-  ADD CONSTRAINT `Constraint_pa_to_g` FOREIGN KEY (`G_email_addr`) REFERENCES `guests` (`Email_addr`),
-  ADD CONSTRAINT `Constraint_pa_to_h` FOREIGN KEY (`H_email_addr`) REFERENCES `host` (`Email_addr`);
+ALTER TABLE `OFFERS`
+  ADD CONSTRAINT `Constraint_off_a` FOREIGN KEY (`A_Name`) REFERENCES `AMENITIES` (`A_Name`),
+  ADD CONSTRAINT `Constraint_off_r` FOREIGN KEY (`H_email_addr`,`R_ID`) REFERENCES `ROOMS` (`H_email_addr`, `R_ID`);
 
 --
--- Constraints for table `reserved_by`
+-- Constraints for table `PAYMENT`
 --
-ALTER TABLE `reserved_by`
-  ADD CONSTRAINT `Constraint_res_to_g` FOREIGN KEY (`G_email_addr`) REFERENCES `guests` (`Email_addr`),
-  ADD CONSTRAINT `Constraint_res_to_r` FOREIGN KEY (`R_ID`,`H_email_addr`) REFERENCES `rooms` (`R_ID`, `H_email_addr`);
+ALTER TABLE `PAYMENT`
+  ADD CONSTRAINT `Constraint_pa_to_g` FOREIGN KEY (`G_email_addr`) REFERENCES `GUESTS` (`Email_addr`),
+  ADD CONSTRAINT `Constraint_pa_to_h` FOREIGN KEY (`H_email_addr`) REFERENCES `HOST` (`Email_addr`);
 
 --
--- Constraints for table `reviews`
+-- Constraints for table `RESERVED_BY`
 --
-ALTER TABLE `reviews`
-  ADD CONSTRAINT `Constraint_re_to_g` FOREIGN KEY (`G_email_addr`) REFERENCES `guests` (`Email_addr`),
-  ADD CONSTRAINT `Constraint_re_to_h` FOREIGN KEY (`H_email_addr`) REFERENCES `host` (`Email_addr`);
+ALTER TABLE `RESERVED_BY`
+  ADD CONSTRAINT `Constraint_res_to_g` FOREIGN KEY (`G_email_addr`) REFERENCES `GUESTS` (`Email_addr`),
+  ADD CONSTRAINT `Constraint_res_to_r` FOREIGN KEY (`R_ID`,`H_email_addr`) REFERENCES `ROOMS` (`R_ID`, `H_email_addr`);
 
 --
--- Constraints for table `rooms`
+-- Constraints for table `REVIEWS`
 --
-ALTER TABLE `rooms`
-  ADD CONSTRAINT `Constraint1` FOREIGN KEY (`H_email_addr`) REFERENCES `host` (`Email_addr`);
+ALTER TABLE `REVIEWS`
+  ADD CONSTRAINT `Constraint_re_to_g` FOREIGN KEY (`G_email_addr`) REFERENCES `GUESTS` (`Email_addr`),
+  ADD CONSTRAINT `Constraint_re_to_h` FOREIGN KEY (`H_email_addr`) REFERENCES `HOST` (`Email_addr`);
+
+--
+-- Constraints for table `ROOMS`
+--
+ALTER TABLE `ROOMS`
+  ADD CONSTRAINT `Constraint1` FOREIGN KEY (`H_email_addr`) REFERENCES `HOST` (`Email_addr`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
