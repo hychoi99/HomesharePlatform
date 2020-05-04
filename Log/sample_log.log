@@ -1,0 +1,38 @@
+Sun May 03 2020 17:49:04 GMT-0700 (Pacific Daylight Time)MySql Connected
+Sun May 03 2020 17:49:21 GMT-0700 (Pacific Daylight Time)Inside Get /Auth Request
+Sun May 03 2020 17:49:21 GMT-0700 (Pacific Daylight Time)Inside Get /Auth Request
+Sun May 03 2020 17:49:42 GMT-0700 (Pacific Daylight Time)Inside Login Post Request
+Sun May 03 2020 17:49:42 GMT-0700 (Pacific Daylight Time)[ RowDataPacket {
+    R_ID: 1,
+    H_email_addr: 'host1@gmail.com',
+    R_Price: 50,
+    R_Type: 'Shared room',
+    R_MaxGuest: 1,
+    R_Addr: '1111, 31st',
+    R_Status: 'unavailable' },
+  RowDataPacket {
+    R_ID: 2,
+    H_email_addr: 'host1@gmail.com',
+    R_Price: 80,
+    R_Type: 'Private room',
+    R_MaxGuest: 2,
+    R_Addr: '2222, 71st',
+    R_Status: 'available' } ]
+Sun May 03 2020 17:49:42 GMT-0700 (Pacific Daylight Time)Inside Get /Auth Request
+Sun May 03 2020 17:49:42 GMT-0700 (Pacific Daylight Time)Inside Get /Auth Request
+Sun May 03 2020 17:49:42 GMT-0700 (Pacific Daylight Time)[ RowDataPacket {
+    R_ID: 1,
+    H_email_addr: 'host1@gmail.com',
+    R_Price: 50,
+    R_Type: 'Shared room',
+    R_MaxGuest: 1,
+    R_Addr: '1111, 31st',
+    R_Status: 'unavailable' },
+  RowDataPacket {
+    R_ID: 2,
+    H_email_addr: 'host1@gmail.com',
+    R_Price: 80,
+    R_Type: 'Private room',
+    R_MaxGuest: 2,
+    R_Addr: '2222, 71st',
+    R_Status: 'available' } ]

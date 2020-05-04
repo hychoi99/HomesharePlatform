@@ -241,7 +241,7 @@ app.get('/getroomshost', function(req, res) {
         if (err) {
             throw err;
         } else {
-            console.log(result);
+            console.logsave(result);
             res.send(result);
         }
     })
@@ -507,7 +507,8 @@ app.get('/getroomsguest', function(req, res) {
 app.get('/getroomamenities', function(req, res) {
     console.log("Inside getroomamenities");
     console.log(req.query);
-    let sql = `SELECT * FROM offered_amenities WHERE offered_amenities.R_ID=${req.query.roomid} AND offered_amenities.H_email_addr=`+ "'" + req.query.hostemail + "'";
+    let sql = `SELECT * FROM offered_amenities WHERE offered_amenities.R_ID=${req.query.roomid} 
+    AND offered_amenities.H_email_addr=`+ "'" + req.query.hostemail + "'";
     console.log(sql);
     let query = db.query(sql, (err, result) => {
         if (err) {
@@ -521,7 +522,8 @@ app.get('/getroomamenities', function(req, res) {
 app.get('/getroominfo', function(req, res) {
     console.log("Inside getroominfo");
 
-    let sql = `SELECT * FROM roomsWithLocation  WHERE ` + 'roomsWithLocation.R_ID = ' + req.query.roomid + ' AND roomsWithLocation.H_email_addr = \''+req.query.hostemail+'\'';
+    let sql = `SELECT * FROM roomsWithLocation  WHERE ` + 'roomsWithLocation.R_ID = ' 
+    + req.query.roomid + ' AND roomsWithLocation.H_email_addr = \''+req.query.hostemail+'\'';
     console.log(sql);
     let query = db.query(sql, (err, result) => {
         if (err) {
@@ -550,21 +552,15 @@ app.get('/getroominfo', function(req, res) {
 
 //     var log = 'Post ' + result.insertId + ' added';
 
-//     // db.query('INSERT INTO log SET data=?', log, function(err, result) {
-//     //   if (err) { 
-//     //     db.rollback(function() {
-//     //       throw err;
-//     //     });
-//     //   }  
-//     //   db.commit(function(err) {
-//     //     if (err) { 
-//     //       db.rollback(function() {
-//     //         throw err;
-//     //       });
-//     //     }
-//     //     console.log('success!');
-//     //   });
-//     // });
+// 	  db.commit(function(err) {
+// 	    if (err) { 
+// 	      db.rollback(function() {
+// 	        throw err;
+// 	      });
+// 	    }
+// 	    console.log('success!');
+// 	  });
+//     });
 //   });
 // });
 
