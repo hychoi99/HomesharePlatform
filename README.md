@@ -8,4 +8,4 @@ Make sure sql is running and confirm connection host, user, password are matched
 
 Sample data can be loaded using /SQL/PROCEDURE.SQL
 
-Full db with sample data can be imported using /SQL/home_share_platform.sql
+Full db with sample data can be imported using files in /SQL
